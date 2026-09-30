@@ -1,0 +1,180 @@
+<?php
+
+namespace App\Http\Controllers\Staff;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Service;
+use App\Models\Patient;
+use Illuminate\Validation\ValidationException;
+
+class ServiceController extends Controller
+{
+    public function index(Request $request)
+    {
+        $q = trim((string) $request->query('q', ''));
+        $sort = (string) $request->query('sort', 'name_asc');
+        $services = Service::query()
+            ->when($q !== '', function ($query) use ($q) {
+                $query->where(function ($match) use ($q) {
+                    $match->whereLike('name', "%{$q}%")
+                        ->orWhereLike('description', "%{$q}%");
+                    if (ctype_digit($q)) $match->orWhereKey((int) $q);
+                    if (is_numeric($q)) $match->orWhere('base_price', $q);
+                });
+            });
+        match ($sort) {
+            'created_desc' => $services->orderByDesc('created_at'),
+            'created_asc' => $services->orderBy('created_at'),
+            'name_desc' => $services->orderByDesc('name'),
+            'price_desc' => $services->orderByDesc('base_price'),
+            'price_asc' => $services->orderBy('base_price'),
+            'custom_yes' => $services->orderByDesc('allow_custom_price'),
+            'custom_no' => $services->orderBy('allow_custom_price'),
+            default => $services->orderBy('name'),
+        };
+        $services = $services->orderBy('id')->paginate(25)->withQueryString();
+        return view('staff.services.index', compact('services'));
+    }
+
+    public function create()
+    {
+        return view('staff.services.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name'               => 'required|string|max:255',
+            'base_price'         => 'required|numeric|min:0',
+            'allow_custom_price' => 'required|in:0,1',
+            'description'        => 'nullable|string',
+
+            // ✅ walk-in fields
+            'is_walk_in'         => 'nullable|boolean',
+            'walk_in_note'       => 'nullable|string|max:255',
+
+            // ✅ duration only matters for scheduled services
+            // clinic said treatments max 1 hour -> max 60
+            'duration_minutes'   => 'nullable|integer|min:15|max:60',
+        ]);
+        if (strtolower(trim($validated['name'])) === 'recement') {
+            throw ValidationException::withMessages(['name' => 'Recement is already available as a staff-only procedure.']);
+        }
+
+        $isWalkIn = (bool)($validated['is_walk_in'] ?? false);
+
+        Service::create([
+            'name'               => $validated['name'],
+            'base_price'         => $validated['base_price'],
+            'allow_custom_price' => (int) $validated['allow_custom_price'],
+            'description'        => $validated['description'] ?? null,
+
+            'is_walk_in'         => $isWalkIn,
+            'walk_in_note'       => $validated['walk_in_note'] ?? null,
+
+            // ✅ if walk-in, ignore duration
+            'duration_minutes'   => $isWalkIn ? null : ($validated['duration_minutes'] ?? null),
+        ]);
+
+        return $this->ktRedirectToReturn($request, 'staff.services.index')
+            ->with('success', 'Service added successfully!');
+    }
+
+    public function edit(Service $service)
+    {
+        if ($service->isRecement()) {
+            return redirect()->route('staff.services.index')
+                ->with('error', 'Recement uses the clinic default of ₱500. Set an exceptional actual charge on the visit.');
+        }
+        return view('staff.services.edit', compact('service'));
+    }
+
+    public function update(Request $request, Service $service)
+    {
+        if ($service->isRecement()) {
+            throw ValidationException::withMessages(['name' => 'Recement is a protected staff-only procedure. Set an exceptional actual charge on the visit.']);
+        }
+        $validated = $request->validate([
+            'name'               => 'required|string|max:255',
+            'base_price'         => 'required|numeric|min:0',
+            'allow_custom_price' => 'required|in:0,1',
+            'description'        => 'nullable|string',
+
+            'is_walk_in'         => 'nullable|boolean',
+            'walk_in_note'       => 'nullable|string|max:255',
+
+            'duration_minutes'   => 'nullable|integer|min:15|max:60',
+        ]);
+        if (strtolower(trim($validated['name'])) === 'recement' && ! $service->isRecement()) {
+            throw ValidationException::withMessages(['name' => 'Recement is already available as a staff-only procedure.']);
+        }
+
+        $isWalkIn = (bool)($validated['is_walk_in'] ?? false);
+
+        $service->update([
+            'name'               => $validated['name'],
+            'base_price'         => $validated['base_price'],
+            'allow_custom_price' => (int) $validated['allow_custom_price'],
+            'description'        => $validated['description'] ?? null,
+
+            'is_walk_in'         => $isWalkIn,
+            'walk_in_note'       => $validated['walk_in_note'] ?? null,
+
+            'duration_minutes'   => $isWalkIn ? null : ($validated['duration_minutes'] ?? null),
+        ]);
+
+        return $this->ktRedirectToReturn($request, 'staff.services.index')
+            ->with('success', 'Service updated successfully!');
+    }
+
+    public function patients(Request $request, Service $service)
+    {
+        $q = trim((string) $request->query('q', ''));
+        $patients = Patient::query()
+            ->whereHas('visits.procedures', function ($q) use ($service) {
+                $q->where('service_id', $service->id);
+            })
+            ->when($q !== '', function ($query) use ($q) {
+                foreach (preg_split('/[\s,]+/u', $q, -1, PREG_SPLIT_NO_EMPTY) ?: [] as $part) {
+                    $query->where(fn ($match) => $match->whereLike('first_name', "%{$part}%")
+                        ->orWhereLike('last_name', "%{$part}%")
+                        ->orWhereLike('middle_name', "%{$part}%"));
+                }
+            })
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->paginate(25)->withQueryString();
+
+        return view('staff.services.patients', compact('service', 'patients'));
+    }
+
+    public function restore(Request $request, int $id)
+    {
+        $service = Service::withTrashed()->findOrFail($id);
+        $service->restore();
+
+        return $this->ktRedirectToReturn($request, 'staff.services.index')
+            ->with('success', 'Service restored successfully!');
+    }
+
+    public function destroy(Request $request, Service $service)
+    {
+        if ($service->isRecement()) {
+            throw ValidationException::withMessages(['name' => 'Recement is a protected staff-only procedure and cannot be deleted.']);
+        }
+        $name = $service->name ?? ('#'.$service->id);
+
+        $service->delete();
+
+        $returnUrl = $this->ktReturnUrl($request, 'staff.services.index');
+
+        return $this->ktRedirectToReturn($request, 'staff.services.index')
+            ->with('success', 'Service deleted successfully!')
+            ->with('undo', [
+                'message' => 'Service deleted: ' . $name,
+                'url' => route('staff.services.restore', ['id' => $service->id, 'return' => $returnUrl]),
+                'ms' => 10000,
+            ]);
+    }
+}

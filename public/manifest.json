@@ -1,0 +1,18 @@
+{
+  "name": "Pasigna Dental Clinic",
+  "short_name": "Pasigna",
+  "description": "Online booking and dental clinic management for Pasigna Dental Clinic.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F8F4FB",
+  "theme_color": "#563682",
+  "icons": [
+    {
+      "src": "/images/favicon.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+:root {
+  --kt-bronze: #7b4da5;
+  --kt-bronze-l: #9d66b9;
+  --kt-champagne: #d1b4e2;
+  --kt-ivory: #f8f4fb;
+  --kt-pearl: #fff;
+  --kt-charcoal: #3c1e5e;
+  --kt-mid: #62576b;
+  --kt-soft: #736a7a;
+  --kt-staff-dark-a: #563682;
+  --kt-staff-dark-b: #3c1e5e;
+  --kt-staff-right-bg: #f8f4fb;
+}
+.kt-login-page .kt-login-brand__img { width: 44px; height: 44px; object-fit: contain; }
+.kt-login-page .kt-login-brand__logo { width: 52px; height: 52px; }
+.kt-login-page .kt-login-left { background: #3c1e5e; }
+.kt-login-page .kt-form-submit { background: #563682; }
+.kt-login-page :where(a, button, input):focus-visible { outline: 3px solid #b78cd4; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .kt-login-page *, .kt-login-page *::before, .kt-login-page *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
