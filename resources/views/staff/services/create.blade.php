@@ -43,9 +43,9 @@
     .form-input:focus,
     .form-select:focus,
     .form-textarea:focus {
-        border-color: #2563eb;
+        border-color: var(--pd-primary);
         outline: none;
-        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        box-shadow: 0 0 0 2px rgba(157, 102, 185, 0.2);
     }
 
     .help-text{
@@ -56,7 +56,7 @@
     }
 
     .submit-btn {
-        background: #2563eb;
+        background: var(--pd-deep);
         padding: 10px 18px;
         border-radius: 8px;
         color: white;
@@ -65,7 +65,7 @@
     }
 
     .submit-btn:hover {
-        background: #1d4ed8;
+        background: var(--pd-ink);
     }
 
     .cancel-link {

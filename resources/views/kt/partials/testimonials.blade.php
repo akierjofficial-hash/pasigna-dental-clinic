@@ -51,7 +51,7 @@
         @if($testiList->isEmpty())
             <article class="kt-testimonials-empty kt-reveal">
                 <h3>No public reviews yet.</h3>
-                <p>Be the first to share your experience with Krys and Tell Dental Center.</p>
+                <p>Be the first to share your experience with {{ config('clinic.name') }}.</p>
             </article>
         @else
             <div class="kt-testimonials__grid">

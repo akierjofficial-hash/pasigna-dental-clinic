@@ -1,5 +1,5 @@
 @component('mail::message')
-# {{ config('app.name') }}
+# {{ config('clinic.name') }}
 
 {!! nl2br(e($replyBody)) !!}
 
@@ -9,5 +9,5 @@ Original message from {{ $contactMessage->name }} ({{ $contactMessage->email }})
 @endcomponent
 
 Thank you,  
-{{ config('app.name') }}
+{{ config('clinic.name') }}
 @endcomponent

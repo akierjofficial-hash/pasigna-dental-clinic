@@ -3,8 +3,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
-    <title>Patient Information Record</title>
+    <link rel="icon" type="image/png" href="{{ asset(config('clinic.favicon')) }}">
+    <title>Patient Information Record | {{ config('clinic.name') }}</title>
     <style>
         @page {
             size: letter;
@@ -36,16 +36,18 @@
         .hdr td{ vertical-align: top; }
 
         .logo-wrap{
-            width: 28%;
+            width: 17%;
             padding-top: 2px;
         }
         .logo{
-            width: 150px;
+            width: 68px;
+            max-height: 68px;
+            object-fit: contain;
             height: auto;
         }
 
         .center-wrap{
-            width: 44%;
+            width: 53%;
             text-align: left;
             padding-top: 6px;
         }
@@ -60,7 +62,7 @@
         }
 
         .chart-wrap{
-            width: 28%;
+            width: 30%;
             text-align: right;
             padding-top: 2px;
         }
@@ -265,6 +267,10 @@
 </head>
 <body>
 @php
+    $clinicLogoPath = public_path(config('clinic.logo'));
+    $clinicLogo = is_file($clinicLogoPath) ? 'data:image/jpeg;base64,' . base64_encode(file_get_contents($clinicLogoPath)) : null;
+@endphp
+@php
     // Expecting $patient passed from controller
     $info = $patient->informationRecord ?? null;
     $consent = $patient->informedConsent ?? null;
@@ -361,10 +367,10 @@
 <div class="page">
     <table class="hdr">
         <tr>
-            <td class="logo-wrap"></td>
+            <td class="logo-wrap">@if($clinicLogo)<img class="logo" src="{{ $clinicLogo }}" alt="">@endif</td>
 
             <td class="center-wrap">
-                <div class="clinic-name">{{ strtoupper(config('app.name')) }}</div>
+                <div class="clinic-name">{{ strtoupper(config('clinic.name')) }}</div>
             </td>
 
             <td class="chart-wrap">
@@ -561,7 +567,7 @@
 
                 <table class="row-table">
                     <tr>
-                        <td class="lbl">Email Add:<span class="req">✓</span></td>
+                        <td class="lbl">Email Add:</td>
                         <td class="line"><span class="val">{{ $patient->email ?? '' }}</span></td>
                     </tr>
                 </table>
@@ -719,10 +725,10 @@
 <div class="page">
     <table class="hdr">
         <tr>
-            <td class="logo-wrap"></td>
+            <td class="logo-wrap">@if($clinicLogo)<img class="logo" src="{{ $clinicLogo }}" alt="">@endif</td>
 
             <td class="center-wrap">
-                <div class="clinic-name">{{ strtoupper(config('app.name')) }}</div>
+                <div class="clinic-name">{{ strtoupper(config('clinic.name')) }}</div>
             </td>
 
             <td class="chart-wrap">

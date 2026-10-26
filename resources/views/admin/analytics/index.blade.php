@@ -458,7 +458,7 @@
     const svcTotals = @json($svcTotals);
     const svcColors = @json($svcColors);
 
-    function cssVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+    function cssVar(name){ return getComputedStyle(document.body).getPropertyValue(name).trim(); }
 
     let charts = [];
 
@@ -476,8 +476,8 @@
                 pointRadius: 0,
                 borderWidth: 2,
                 fill: true,
-                backgroundColor: 'rgba(59,130,246,.12)',
-                borderColor: 'rgba(59,130,246,.95)',
+                backgroundColor: 'rgba(123,77,165,.14)',
+                borderColor: cssVar('--admin-primary'),
             }]},
             options:{
                 responsive:true,
@@ -485,7 +485,7 @@
                 plugins:{ legend:{ display:false } },
                 scales:{
                     x:{ grid:{ display:false }, ticks:{ color: muted, font:{ weight:900 }, maxRotation:0 } },
-                    y:{ grid:{ color:'rgba(148,163,184,.14)' }, ticks:{ color: muted, font:{ weight:900 } } }
+                    y:{ grid:{ color: cssVar('--admin-border') }, ticks:{ color: muted, font:{ weight:900 } } }
                 }
             }
         });
@@ -514,7 +514,7 @@
                 plugins:{ legend:{ display:false } },
                 scales:{
                     x:{ grid:{ display:false }, ticks:{ color: muted, font:{ weight:900 }, maxRotation:0 } },
-                    y:{ grid:{ color:'rgba(148,163,184,.14)' }, ticks:{ color: muted, font:{ weight:900 } } }
+                    y:{ grid:{ color: cssVar('--admin-border') }, ticks:{ color: muted, font:{ weight:900 } } }
                 }
             }
         });

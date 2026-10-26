@@ -83,7 +83,7 @@
     .i-btn-primary{
         border: none;
         color: #fff !important;
-        background: linear-gradient(135deg, #0d6efd, #1e90ff);
+        background: linear-gradient(135deg, var(--pd-deep), var(--pd-primary));
         box-shadow: 0 10px 18px rgba(13, 110, 253, .18);
     }
     .i-btn-primary:hover{
@@ -285,7 +285,7 @@
     .i-mini-primary{
         border: none;
         color: #fff !important;
-        background: linear-gradient(135deg, #0d6efd, #1e90ff);
+        background: linear-gradient(135deg, var(--pd-deep), var(--pd-primary));
         box-shadow: 0 8px 14px rgba(13,110,253,.16);
     }
     .i-mini-primary:hover{

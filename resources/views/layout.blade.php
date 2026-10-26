@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Krys&Tell Dental Center System</title>
+    <title>{{ config('clinic.name') }} System</title>
 
     {{-- ✅ PWA (Installable App) --}}
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#B07C58">
+    <meta name="theme-color" content="{{ config('clinic.colors.deep') }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Krys&Tell">
-    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <meta name="apple-mobile-web-app-title" content="{{ config('clinic.name') }}">
+    <link rel="apple-touch-icon" href="{{ asset(config('clinic.favicon')) }}">
+    <link rel="icon" type="image/png" href="{{ asset(config('clinic.favicon')) }}">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
 </head>

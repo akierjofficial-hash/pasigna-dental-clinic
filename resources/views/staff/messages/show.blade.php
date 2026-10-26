@@ -70,7 +70,7 @@
 
     .btnx-primary{
         border: none;
-        background: linear-gradient(135deg, #0d6efd, #1e90ff);
+        background: linear-gradient(135deg, var(--pd-deep), var(--pd-primary));
         color:#fff;
         box-shadow: 0 10px 18px rgba(13,110,253,.20);
     }
@@ -222,7 +222,7 @@
             </a>
 
             <a class="btnx"
-               href="mailto:{{ $message->email }}?subject={{ rawurlencode('Re: Message to ' . config('app.name')) }}">
+               href="mailto:{{ $message->email }}?subject={{ rawurlencode('Re: Message to ' . config('clinic.name')) }}">
                 <i class="fa-regular fa-envelope"></i> Open Mail App
             </a>
 
@@ -322,7 +322,7 @@
                         name="subject"
                         class="formx"
                         maxlength="190"
-                        value="{{ old('subject', 'Re: Message to ' . config('app.name')) }}"
+                        value="{{ old('subject', 'Re: Message to ' . config('clinic.name')) }}"
                         required
                     >
                     @error('subject')<div class="text-danger small mt-1">{{ $message }}</div>@enderror

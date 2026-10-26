@@ -22,7 +22,47 @@
         </div>
     </div>
 </section>
-<section class="pd-section pd-section-soft">
+<section class="pd-section pd-section-soft" aria-labelledby="clinic-details-title">
+    <div class="pd-container">
+        <div class="pd-section-head">
+            <span class="pd-eyebrow">Plan your visit</span>
+            <h2 class="pd-title" id="clinic-details-title">Clinic details</h2>
+            <p class="pd-lead">Find us, call the clinic, or visit our Facebook page before coming in.</p>
+        </div>
+        <dl class="pd-clinic-details">
+            <div>
+                <dt>Address</dt>
+                <dd>{{ config('clinic.address') ?: config('clinic.city') }}</dd>
+            </div>
+            @if(config('clinic.hours'))
+                <div>
+                    <dt>Opening hours</dt>
+                    <dd>{{ config('clinic.hours') }}</dd>
+                </div>
+            @endif
+            @if(config('clinic.phone'))
+                <div>
+                    <dt>Phone number</dt>
+                    <dd><a href="tel:{{ preg_replace('/[^+\d]/', '', config('clinic.phone')) }}">{{ config('clinic.phone') }}</a></dd>
+                </div>
+            @endif
+            @if(config('clinic.facebook'))
+                <div>
+                    <dt>Facebook</dt>
+                    <dd><a href="{{ config('clinic.facebook') }}" rel="noopener noreferrer">Pasigna Dental Clinic on Facebook</a></dd>
+                </div>
+            @endif
+            @if(config('clinic.email'))
+                <div>
+                    <dt>Email</dt>
+                    <dd><a href="mailto:{{ config('clinic.email') }}">{{ config('clinic.email') }}</a></dd>
+                </div>
+            @endif
+        </dl>
+        <div class="pd-actions"><a class="pd-text-link" href="{{ route('public.contact') }}">View the location map and contact form <span aria-hidden="true">→</span></a></div>
+    </div>
+</section>
+<section class="pd-section">
     <div class="pd-container">
         <div class="pd-section-head"><span class="pd-eyebrow">A look inside</span><h2 class="pd-title">Spaces for your visit</h2></div>
         <div class="pd-gallery-grid">

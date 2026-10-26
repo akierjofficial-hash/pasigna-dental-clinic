@@ -283,7 +283,7 @@
                     </article>
                     <article class="kt-booking-v2__aside-card">
                         <h3>Clinic Hours</h3>
-                        <p>Mon-Sat, 9:00 AM to 5:00 PM</p>
+                        <p>{{ config('clinic.hours') }}</p>
                         <small>Schedules may be adjusted depending on clinic flow.</small>
                     </article>
                     @if($doctorRestrictionEnabled)
@@ -555,6 +555,14 @@
 
     async function loadSlots(){
         var date = dateEl.value;
+        var sunday = date && new Date(date + 'T12:00:00').getDay() === 0;
+        dateEl.setCustomValidity(sunday ? 'The clinic is closed on Sundays. Please choose Monday to Saturday.' : '');
+        if (sunday) {
+            setLoading('Closed on Sundays');
+            timeEl.disabled = true;
+            if (helpEl) helpEl.textContent = 'The clinic is closed on Sundays. Please choose Monday to Saturday.';
+            return;
+        }
         var preferredDoctorId = doctorEl ? doctorEl.value : '';
         await syncDoctorsByDate(date, preferredDoctorId);
         var doctorId = doctorEl ? doctorEl.value : '';

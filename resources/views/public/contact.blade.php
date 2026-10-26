@@ -26,6 +26,7 @@
             @if(config('clinic.hours'))<p><strong>Hours:</strong> {{ config('clinic.hours') }}</p>@endif
             @if(config('clinic.phone'))<p><strong>Phone:</strong> <a href="tel:{{ preg_replace('/[^+\d]/', '', config('clinic.phone')) }}">{{ config('clinic.phone') }}</a></p>@endif
             @if(config('clinic.email'))<p><strong>Email:</strong> <a href="mailto:{{ config('clinic.email') }}">{{ config('clinic.email') }}</a></p>@endif
+            @if(config('clinic.facebook'))<p><strong>Facebook:</strong> <a href="{{ config('clinic.facebook') }}" rel="noopener noreferrer">Pasigna Dental Clinic</a></p>@endif
             <p>For online appointments, choose a listed service and sign in. Staff review requests before confirming them.</p>
             <a class="pd-text-link" href="{{ route('public.services.index') }}">Browse services <span aria-hidden="true">→</span></a>
         </aside>
@@ -68,6 +69,12 @@
                 <button type="submit" class="pd-button">Send message</button>
             </form>
         </div>
+    </div>
+    <div class="pd-container">
+        <figure class="pd-location-map">
+            <img src="{{ asset('images/PasignaAssets/map.png') }}" width="1486" height="772" alt="Map showing Pasigna Dental Clinic near Guihulngan City Auditorium" loading="lazy">
+            <figcaption>Pasigna Dental Clinic in Guihulngan, Negros Oriental. Use the contact form above if you need help finding the clinic.</figcaption>
+        </figure>
     </div>
 </section>
 @endsection

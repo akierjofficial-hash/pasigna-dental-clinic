@@ -19,7 +19,7 @@ class AdminUiRevampTest extends TestCase
         $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
         $staff = User::factory()->create(['role' => 'staff', 'is_active' => true]);
         $websiteUser = User::factory()->create(['role' => 'user', 'is_active' => true]);
-        $doctor = Doctor::create(['name' => 'Dr. Krys Tell', 'is_active' => true]);
+        $doctor = Doctor::create(['name' => 'Dr. Interface', 'is_active' => true]);
         $patient = Patient::create(['first_name' => 'Sample', 'last_name' => 'Patient']);
         Service::create(['name' => 'Dental Cleaning', 'base_price' => 1000, 'duration_minutes' => 30]);
         $request = new Appointment();
@@ -63,6 +63,9 @@ class AdminUiRevampTest extends TestCase
                 ->assertOk()
                 ->assertSee('class="admin-app"', false)
                 ->assertSee('css/admin-app.css', false)
+                ->assertSee('Pasigna Dental Clinic')
+                ->assertSee('images/PasignaAssets/logo.jpg', false)
+                ->assertDontSee('Krys &amp; Tell', false)
                 ->assertSee('Admin Workspace');
         }
     }
@@ -78,6 +81,29 @@ class AdminUiRevampTest extends TestCase
             ->assertSee('Toggle dark mode')
             ->assertSee('Clinic overview')
             ->assertSee('Manage my account');
+    }
+
+    public function test_dentist_schedule_form_supports_friday_and_saturday_only(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin', 'is_active' => true]);
+
+        $this->actingAs($admin)->get(route('admin.doctors.create'))
+            ->assertOk()
+            ->assertSee('Friday + Saturday only');
+
+        $this->actingAs($admin)->post(route('admin.doctors.store'), [
+            'name' => 'Dr. Weekend Fixture',
+            'working_days' => [5, 6],
+            'work_start_time' => '09:00',
+            'work_end_time' => '17:00',
+            'is_active' => 1,
+        ])->assertRedirect(route('admin.doctors.index'));
+
+        $doctor = Doctor::where('name', 'Dr. Weekend Fixture')->sole();
+        $this->assertSame([5, 6], $doctor->working_days);
+        $this->actingAs($admin)->get(route('admin.doctors.edit', $doctor))
+            ->assertOk()
+            ->assertSee('Friday + Saturday only');
     }
 
     public function test_admin_views_do_not_use_native_confirmation_dialogs_or_fixed_calendar_height(): void

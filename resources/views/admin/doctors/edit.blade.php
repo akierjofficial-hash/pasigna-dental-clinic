@@ -289,19 +289,7 @@
                 <input class="form-control kt-control" type="time" name="work_end_time" value="{{ $endTime }}">
             </div>
 
-            <div class="col-12">
-                <label class="form-label d-block">Working Days</label>
-                <div class="d-flex flex-wrap gap-3">
-                    @foreach($dayOptions as $dayVal => $dayLabel)
-                        <label class="form-check-label d-flex align-items-center gap-2" style="font-weight:850;">
-                            <input type="checkbox" class="form-check-input" name="working_days[]" value="{{ $dayVal }}"
-                                   @checked(in_array($dayVal, $selectedDays, true))>
-                            <span>{{ $dayLabel }}</span>
-                        </label>
-                    @endforeach
-                </div>
-                <div class="hint mt-1">These days/times control this dentist's booking slots.</div>
-            </div>
+            @include('admin.doctors.partials.working-days')
 
             <div class="col-12">
                 <div class="toggle-wrap">

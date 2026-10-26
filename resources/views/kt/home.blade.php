@@ -1,6 +1,6 @@
 @extends('layouts.kt-public')
 
-@section('title', 'Krys & Tell Dental Center')
+@section('title', config('clinic.name'))
 
 @section('content')
     @php

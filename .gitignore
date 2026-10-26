@@ -32,7 +32,7 @@
 /public/build/
 /public/hot
 /bootstrap/cache/*.php
-/resources/views/vendor/
+# Published mail views are source templates and must be versioned.
 /.phpunit.cache/
 /.phpunit.result.cache
 /.phpactor.json

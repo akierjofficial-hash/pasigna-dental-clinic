@@ -116,7 +116,7 @@
         align-items:center;
         justify-content:center;
         color:#fff;
-        background: linear-gradient(135deg,#2563eb,#0ea5e9);
+        background: linear-gradient(135deg, var(--pd-deep), var(--pd-primary));
         box-shadow: 0 14px 24px rgba(37,99,235,.18);
         flex: 0 0 auto;
         font-size: 18px;

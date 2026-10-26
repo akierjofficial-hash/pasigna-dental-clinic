@@ -21,8 +21,8 @@
         --p-soft2: rgba(148,163,184,.18);
 
         --p-radius: 16px;
-        --p-brand: #0d6efd;
-        --p-brand2:#1e90ff;
+        --p-brand: var(--pd-deep);
+        --p-brand2:var(--pd-primary);
 
         --focus: rgba(96,165,250,.55);
         --focusRing: rgba(96,165,250,.18);

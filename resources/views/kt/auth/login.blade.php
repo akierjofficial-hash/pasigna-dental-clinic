@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset(config('clinic.favicon')) }}">
     <title>{{ request()->routeIs('login') ? 'Staff Portal Sign In | ' . config('clinic.name') : 'Sign In | ' . config('clinic.name') }}</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
         <div class="kt-login-left__top">
             <a href="{{ route('public.home') }}" class="kt-login-brand" aria-label="Pasigna Dental Clinic home">
                 <div class="kt-login-brand__logo">
-                    <img src="{{ asset('images/PasignaAssets/logo.jpg') }}" alt="" width="44" height="44" class="kt-login-brand__img" loading="eager">
+                    <img src="{{ asset(config('clinic.logo')) }}" alt="" width="44" height="44" class="kt-login-brand__img" loading="eager">
                 </div>
                 <div>
                     <div class="kt-login-brand__name">PASIGNA</div>

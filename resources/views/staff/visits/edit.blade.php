@@ -17,8 +17,8 @@
         --muted: var(--kt-muted);
         --muted2: rgba(148,163,184,.80);
 
-        --brand1: #0d6efd;
-        --brand2: #1e90ff;
+        --brand1: var(--pd-deep);
+        --brand2: var(--pd-primary);
 
         --danger: #f87171;
         --dangerBg: rgba(248,113,113,.16);
@@ -478,7 +478,7 @@
         min-width: 20px;
         height: 20px;
         border-radius: 999px;
-        background: #0d6efd;
+        background: var(--pd-deep);
         color:#fff;
         font-size: 11px;
         font-weight: 950;

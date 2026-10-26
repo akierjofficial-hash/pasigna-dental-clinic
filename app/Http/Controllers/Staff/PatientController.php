@@ -460,7 +460,7 @@ class PatientController extends Controller
             'birthdate'      => 'required|date',
             'gender'         => 'required|string|in:Male,Female,Other',
             'contact_number' => 'required|string|max:20',
-            'email'          => 'required|email|max:255',
+            'email'          => 'nullable|email|max:255',
             'address'        => 'required|string|max:500',
             'notes'          => 'nullable|string|max:1000',
 
@@ -534,7 +534,7 @@ class PatientController extends Controller
             'birthdate'      => $validated['birthdate'],
             'gender'         => $validated['gender'],
             'contact_number' => $validated['contact_number'],
-            'email'          => $validated['email'],
+            'email'          => $validated['email'] ?? null,
             'address'        => $validated['address'],
             'notes'          => $validated['notes'] ?? null,
         ]);

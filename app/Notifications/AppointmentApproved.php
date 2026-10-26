@@ -47,7 +47,7 @@ class AppointmentApproved extends Notification
         $note = trim((string)($a->staff_note ?? ''));
 
         $mail = (new MailMessage)
-            ->subject($isWalkInRequest ? "Walk-in Request Approved: {$service}" : "Booking Approved: {$service}")
+            ->subject(config('clinic.name') . ' | ' . ($isWalkInRequest ? "Walk-in Request Approved: {$service}" : "Booking Approved: {$service}"))
             ->greeting('Hi ' . $patientName . ',')
             ->line($isWalkInRequest
                 ? 'Good news — your walk-in request has been approved.'
@@ -65,7 +65,8 @@ class AppointmentApproved extends Notification
         $mail->action('View My Schedule', route('profile.show'))
             ->line($isWalkInRequest
                 ? 'Please proceed during clinic hours. If you cannot come, please message the clinic.'
-                : 'If you need to reschedule, please contact the clinic.');
+                : 'If you need to reschedule, please contact the clinic.')
+            ->salutation(config('clinic.name'));
 
         return $mail;
     }

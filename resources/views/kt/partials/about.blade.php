@@ -33,7 +33,7 @@
                 Designed for Comfort,<br>Delivered with <em>Expertise</em>
             </h2>
             <p class="kt-section-body">
-                At Krys &amp; Tell, exceptional care goes beyond clinical excellence. Every detail is crafted around your comfort, from arrival to aftercare.
+                At {{ config('clinic.name') }}, care starts with clear explanations and a comfortable visit.
             </p>
 
             <div class="kt-about__features">
