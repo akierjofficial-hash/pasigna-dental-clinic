@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Staff and Admin Login | Krys and Tell')
+@section('title', 'Staff and Admin Login | ' . config('clinic.name'))
 
 @section('content')
 <style>
@@ -381,9 +381,9 @@
         <aside class="kt-auth__aside">
             <div>
                 <div class="kt-auth__brand">
-                    <img src="{{ asset('images/krysandtelllogo.jpg') }}" alt="Krys and Tell" class="kt-auth__logo">
+                    <img src="{{ asset(config('clinic.logo')) }}" alt="" class="kt-auth__logo">
                     <div>
-                        <p class="kt-auth__brand-name">Krys and Tell</p>
+                        <p class="kt-auth__brand-name">{{ config('clinic.name') }}</p>
                         <p class="kt-auth__brand-sub">Clinic Management System</p>
                     </div>
                 </div>
@@ -479,7 +479,7 @@
 
                 <p class="kt-auth__foot">
                     Need a patient account? <a href="{{ route('userlogin') }}">Go to User Login</a><br>
-                    Copyright {{ date('Y') }} Krys and Tell Dental Center
+                    Copyright {{ date('Y') }} {{ config('clinic.name') }}
                 </p>
             </form>
         </section>

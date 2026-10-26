@@ -4,14 +4,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Krys & Tell Dental Center')</title>
+    <title>@yield('title', config('clinic.name'))</title>
 
     {{-- ✅ PWA (Installable App) --}}
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#B07C58">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Krys&Tell">
+    <meta name="apple-mobile-web-app-title" content="{{ config('clinic.name') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
@@ -886,10 +886,9 @@
 
                 {{-- Brand --}}
                 <a class="kt-brand order-2 order-lg-1" href="{{ url('/') }}">
-                    <img class="kt-logo" src="{{ asset('images/krysandtelllogo.jpg') }}" alt="Krys & Tell logo">
+                    <img class="kt-logo" src="{{ asset(config('clinic.logo')) }}" alt="">
                     <div class="kt-brand-text">
-                        <div class="name">Krys &amp; Tell</div>
-                        <div class="sub">Dental Center</div>
+                        <div class="name">{{ config('clinic.name') }}</div>
                     </div>
                 </a>
 
@@ -1005,11 +1004,9 @@
                     {{-- Brand --}}
                     <div class="col-lg-4">
                         <a href="{{ url('/') }}" class="kt-footer-brand d-inline-flex align-items-center gap-2">
-                            <img class="kt-footer-logo" src="{{ asset('images/krysandtelllogo.jpg') }}"
-                                alt="Krys & Tell logo">
+                            <img class="kt-footer-logo" src="{{ asset(config('clinic.logo')) }}" alt="">
                             <span class="kt-footer-name">
-                                Krys <span style="color:rgba(210,160,122,.95)">&amp;</span> Tell
-                                <small class="d-block">Dental Center</small>
+                                {{ config('clinic.name') }}
                             </span>
                         </a>
 
@@ -1093,7 +1090,7 @@
 
                 <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between pb-2">
                     <div class="kt-footer-copy">
-                        © {{ date('Y') }} Krys &amp; Tell Dental Center. All rights reserved.
+                        © {{ date('Y') }} {{ config('clinic.name') }}. All rights reserved.
                     </div>
 
                     <div class="kt-footer-mini-links d-flex flex-wrap gap-3">

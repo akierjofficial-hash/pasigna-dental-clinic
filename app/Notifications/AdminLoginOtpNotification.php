@@ -22,11 +22,12 @@ class AdminLoginOtpNotification extends Notification
 
     public function toMail($notifiable): MailMessage {
         return (new MailMessage)
-            ->subject('Your Admin Login Code')
+            ->subject(config('clinic.name') . ' | Admin Login Code')
             ->greeting('Hi '.$notifiable->name.',')
             ->line('Use this code to finish logging in:')
             ->line('**'.$this->code.'**')
             ->line('This code expires in '.$this->minutesValid.' minutes.')
-            ->line('If you did not try to log in, please change your password.');
+            ->line('If you did not try to log in, please change your password.')
+            ->salutation(config('clinic.name'));
     }
 }

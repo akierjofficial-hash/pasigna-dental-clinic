@@ -39,7 +39,7 @@ return trim((string) ($s->name ?? ''));
 
         <h1 class="kt-hero__headline">
             <span>Welcome to</span>
-            <em>Krys&amp;Tell.</em>
+            <em>{{ config('clinic.name') }}.</em>
         </h1>
 
         <p class="kt-hero__sub">

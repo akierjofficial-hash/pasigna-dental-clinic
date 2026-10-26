@@ -344,7 +344,7 @@
             </div>
 
             <div class="orb" aria-hidden="true">
-                <img src="{{ asset('images/PasignaAssets/logo.jpg') }}" alt="Pasigna Dental Clinic logo" width="1254" height="1254">
+                <img src="{{ asset(config('clinic.logo')) }}" alt="Pasigna Dental Clinic logo" width="1254" height="1254">
             </div>
 
             <h1>Welcome Back!</h1>

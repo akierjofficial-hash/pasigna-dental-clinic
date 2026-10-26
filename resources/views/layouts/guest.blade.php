@@ -13,8 +13,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Pasigna Dental Clinic">
-    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset(config('clinic.favicon')) }}">
+    <link rel="icon" type="image/png" href="{{ asset(config('clinic.favicon')) }}">
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"

@@ -24,8 +24,8 @@
         --muted: var(--kt-muted, rgba(15, 23, 42, .55));
         --muted2: rgba(148,163,184,.72);
 
-        --brand1: #0d6efd;
-        --brand2: #1e90ff;
+        --brand1: var(--pd-deep);
+        --brand2: var(--pd-primary);
 
         --focus: rgba(96,165,250,.55);
         --focusRing: rgba(96,165,250,.18);

@@ -180,6 +180,10 @@ class PublicBookingController extends Controller
             : $autoAssignedDoctorId;
         $time = $isWalkIn ? null : $request->time;
 
+        if (!$this->clinicWorksOnDate($date)) {
+            return back()->withErrors(['date' => 'The clinic is closed on Sundays. Please choose Monday to Saturday.'])->withInput();
+        }
+
         if ($doctorRequired && !$doctorId) {
             return back()
                 ->withErrors(['doctor_id' => $this->missingDoctorMessage($service)])
@@ -481,6 +485,10 @@ class PublicBookingController extends Controller
             : $autoAssignedDoctorId;
         $requestWalkIn = !$isWalkInService && $request->boolean('request_walkin');
         $isWalkIn = $isWalkInService || $requestWalkIn;
+
+        if (!$this->clinicWorksOnDate($date)) {
+            return back()->withErrors(['date' => 'The clinic is closed on Sundays. Please choose Monday to Saturday.'])->withInput();
+        }
 
         if ($doctorRequired && !$doctorId) {
             return back()
@@ -1030,6 +1038,11 @@ class PublicBookingController extends Controller
         return [1, 2, 3, 4, 5, 6]; // Mon-Sat
     }
 
+    private function clinicWorksOnDate(string $date): bool
+    {
+        return in_array(Carbon::parse($date, config('app.timezone'))->dayOfWeekIso, $this->defaultWorkingDays(), true);
+    }
+
     private function normalizeWorkingDays($raw): array
     {
         if (is_string($raw)) {
@@ -1099,15 +1112,27 @@ class PublicBookingController extends Controller
             $close = self::CLINIC_CLOSE;
         }
 
+        // Public booking stays within clinic hours even if a dentist has a wider schedule.
+        $open = max($open, self::CLINIC_OPEN);
+        $close = min($close, self::CLINIC_CLOSE);
+        $hasOpenHours = $open < $close;
+        if (!$hasOpenHours) {
+            $open = self::CLINIC_OPEN;
+            $close = self::CLINIC_CLOSE;
+        }
+
         return [
             'open' => $open,
             'close' => $close,
             'working_days' => $workingDays,
+            'has_open_hours' => $hasOpenHours,
         ];
     }
 
     private function doctorWorksOnDate(array $schedule, string $date, string $tz): bool
     {
+        if (!$this->clinicWorksOnDate($date)) return false;
+        if (!($schedule['has_open_hours'] ?? true)) return false;
         $dayIso = Carbon::parse($date, $tz)->dayOfWeekIso;
         $workingDays = $this->normalizeWorkingDays($schedule['working_days'] ?? null);
         return in_array($dayIso, $workingDays, true);

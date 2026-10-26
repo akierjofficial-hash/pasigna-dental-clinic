@@ -36,13 +36,14 @@ class AppointmentReminder extends Notification
         $subjectPrefix = $this->kind === '1h' ? 'Upcoming in ~1 hour' : 'Upcoming within 24 hours';
 
         return (new MailMessage)
-            ->subject("{$subjectPrefix}: {$service}")
+            ->subject(config('clinic.name') . " | {$subjectPrefix}: {$service}")
             ->greeting('Hi '.$notifiable->name.',')
             ->line("This is a reminder for your appointment **{$relative}**.")
             ->line("**Service:** {$service}")
             ->line("**Date & Time:** {$when}")
             ->line("**Doctor:** {$doctor}")
             ->action('View My Schedule', route('profile.show'))
-            ->line('If you need to reschedule, please contact the clinic.');
+            ->line('If you need to reschedule, please contact the clinic.')
+            ->salutation(config('clinic.name'));
     }
 }

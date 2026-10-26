@@ -1,15 +1,15 @@
-/* Krys & Tell Admin design system. Scoped to .admin-app. */
+/* Pasigna admin design system. Scoped to .admin-app. */
 .admin-app {
-    --admin-sidebar: #10233f;
-    --admin-sidebar-2: #172f50;
-    --admin-primary: #2563eb;
-    --admin-primary-hover: #1d4ed8;
-    --admin-teal: #0891b2;
-    --admin-bg: #f5f7fa;
+    --admin-sidebar: var(--pd-ink);
+    --admin-sidebar-2: var(--pd-deep);
+    --admin-primary: var(--pd-deep);
+    --admin-primary-hover: var(--pd-ink);
+    --admin-teal: var(--pd-primary);
+    --admin-bg: #faf7fd;
     --admin-surface: #fff;
     --admin-text: #0f172a;
     --admin-muted: #64748b;
-    --admin-border: #e2e8f0;
+    --admin-border: #e4d8ed;
     --admin-success: #15803d;
     --admin-warning: #b45309;
     --admin-danger: #dc2626;
@@ -26,20 +26,22 @@
 }
 
 html[data-theme="dark"] .admin-app {
-    --admin-sidebar: #081426;
-    --admin-sidebar-2: #122743;
-    --admin-bg: #0b1220;
-    --admin-surface: #111c2e;
-    --admin-text: #e8eef8;
-    --admin-muted: #9aabc2;
-    --admin-border: #26364d;
+    --admin-sidebar: #2b1544;
+    --admin-sidebar-2: #3c1e5e;
+    --admin-bg: #180f24;
+    --admin-surface: #291b38;
+    --admin-text: #f7f1fb;
+    --admin-muted: #cabbd8;
+    --admin-border: #4e3a60;
+    --admin-primary: var(--pd-soft);
+    --admin-primary-hover: var(--pd-lavender);
     --admin-shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.18);
     color-scheme: dark;
 }
 
 .admin-app *, .admin-app *::before, .admin-app *::after { box-sizing: border-box; }
 .admin-app a { color: var(--admin-primary); }
-.admin-app :focus-visible { outline: 3px solid rgba(37, 99, 235, .28) !important; outline-offset: 2px; }
+.admin-app :focus-visible { outline: 3px solid var(--pd-accent) !important; outline-offset: 2px; }
 .admin-app .app-bg { min-height: 100vh; background: var(--admin-bg) !important; }
 .admin-app .shell { min-height: 100vh; align-items: stretch; }
 .admin-app .skip-link { position: fixed; left: 12px; top: -60px; z-index: 10000; padding: 10px 14px; border-radius: 8px; background: #fff; color: #0f172a; font-weight: 700; transition: top .15s; }
@@ -61,8 +63,8 @@ html[data-theme="dark"] .admin-app {
 .admin-app .brand { margin: 0 4px 14px !important; padding: 2px 4px 18px !important; border-bottom: 1px solid rgba(255,255,255,.1) !important; }
 .admin-app .brand-left { gap: 11px; }
 .admin-app .logo { width: 42px; height: 42px; overflow: hidden; border-radius: 12px !important; background: #fff !important; box-shadow: none !important; }
-.admin-app .logo img { width: 100%; height: 100%; object-fit: cover; }
-.admin-app .brand .name { color: #fff; font-size: 15px; font-weight: 700 !important; letter-spacing: -.2px; }
+.admin-app .logo img { width: 100%; height: 100%; object-fit: contain; }
+.admin-app .brand .name { color: #fff; font-size: 13px; font-weight: 700 !important; letter-spacing: -.2px; white-space: normal; line-height: 1.15; }
 .admin-app .brand .sub { color: #9fb0c7; font-size: 11px; font-weight: 500; }
 .admin-app .navx { padding: 0 4px 10px !important; margin: 0 !important; gap: 3px !important; scrollbar-color: rgba(255,255,255,.18) transparent; }
 .admin-app .nav-section { padding: 17px 10px 6px !important; color: #8fa4bf !important; font-size: 10px !important; letter-spacing: 1.2px !important; font-weight: 700 !important; }
@@ -81,7 +83,7 @@ html[data-theme="dark"] .admin-app {
 .admin-app .navx a i { width: 18px !important; color: #8fa4bf !important; text-align: center; font-size: 14px; }
 .admin-app .navx a:hover { background: rgba(255,255,255,.07) !important; color: #fff !important; }
 .admin-app .navx a:hover i { color: #fff !important; }
-.admin-app .navx a.active { background: var(--admin-primary) !important; color: #fff !important; box-shadow: 0 8px 18px rgba(37,99,235,.22) !important; }
+.admin-app .navx a.active { background: var(--pd-primary) !important; color: #fff !important; box-shadow: 0 8px 18px rgba(60,30,94,.22) !important; }
 .admin-app .navx a.active i { color: #fff !important; }
 .admin-app .kt-nav-badge { min-width: 19px; height: 19px; background: #ef4444; border: 2px solid var(--admin-sidebar); font-size: 10px; }
 .admin-app .side-footer { padding: 14px 4px 0 !important; border-color: rgba(255,255,255,.1) !important; }
@@ -248,16 +250,16 @@ html[data-theme="dark"] .admin-app .kt-top-icon:hover, html[data-theme="dark"] .
 /* Dashboard */
 .admin-app .admin-overview { gap: 16px; }
 .admin-app .overview-time { color: var(--admin-muted) !important; font-size: 12px; font-weight: 500 !important; }
-.admin-app .admin-welcome { padding: 20px 22px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-radius: 14px; background: linear-gradient(125deg,#1d4ed8,#2563eb 56%,#0891b2); color: #fff; }
+.admin-app .admin-welcome { padding: 20px 22px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-radius: 14px; background: linear-gradient(125deg,var(--pd-ink),var(--pd-deep) 56%,var(--pd-primary)); color: #fff; }
 .admin-app .admin-welcome h2 { margin: 0; color: #fff; font-size: 20px; font-weight: 650; }
 .admin-app .admin-welcome p { margin: 5px 0 0; color: rgba(255,255,255,.8); font-size: 13px; }
-.admin-app .admin-welcome .btn { background: #fff !important; border-color: #fff !important; color: #1746a2 !important; }
+.admin-app .admin-welcome .btn { background: #fff !important; border-color: #fff !important; color: var(--pd-ink) !important; }
 .admin-app .metric-grid { gap: 12px !important; }
 .admin-app .metric { min-height: 112px; padding: 16px !important; }
-.admin-app .metric.metric-featured { background: linear-gradient(135deg,#eff6ff,#ecfeff) !important; border-color: #bfdbfe !important; }
+.admin-app .metric.metric-featured { background: linear-gradient(135deg,#f8f1fc,#eee0f8) !important; border-color: var(--pd-soft) !important; }
 .admin-app .metric-label { color: var(--admin-muted) !important; font-size: 10px !important; font-weight: 700 !important; letter-spacing: .65px; }
 .admin-app .metric-value { color: var(--admin-text); font-size: clamp(24px,2.2vw,31px) !important; font-weight: 700 !important; font-variant-numeric: tabular-nums; }
-.admin-app .metric-icon { border-radius: 10px !important; background: #eff6ff !important; color: var(--admin-primary) !important; }
+.admin-app .metric-icon { border-radius: 10px !important; background: #f1e5f8 !important; color: var(--pd-deep) !important; }
 .admin-app .panelx { padding: 16px !important; }
 .admin-app .panel-title h2 { font-size: 15px !important; font-weight: 650 !important; }
 .admin-app .clean-row { box-shadow: none !important; border-radius: 10px !important; }

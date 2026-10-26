@@ -137,7 +137,7 @@ html[data-theme="dark"] .selectx option{
     border: none;
     color: #fff;
     text-decoration: none;
-    background: linear-gradient(135deg, #0d6efd, #1e90ff);
+    background: linear-gradient(135deg, var(--pd-deep), var(--pd-primary));
     box-shadow: 0 10px 18px rgba(13, 110, 253, .20);
     transition: .15s ease;
 }
@@ -453,7 +453,7 @@ html[data-theme="dark"] .warn-box .text-muted{
         <div class="card-head">
             <div class="section-title">
                 <i class="fa fa-user"></i> Patient Information Record
-                <span class="badge-mini">Required: name, birthdate, sex, address, mobile, email, occupation</span>
+                <span class="badge-mini">Required: name, birthdate, sex, address, mobile, occupation</span>
             </div>
             <div class="hint">Fields marked <span class="text-danger">*</span> are required.</div>
         </div>
@@ -512,8 +512,8 @@ html[data-theme="dark"] .warn-box .text-muted{
                 </div>
 
                 <div class="col-12 col-md-4">
-                    <label class="form-labelx">Email Add <span class="text-danger">*</span></label>
-                    <input type="email" name="email" class="inputx" value="{{ old('email') }}" required>
+                    <label class="form-labelx">Email Address (optional)</label>
+                    <input type="email" name="email" class="inputx" value="{{ old('email') }}">
                 </div>
 
                 <div class="col-12 col-md-4">

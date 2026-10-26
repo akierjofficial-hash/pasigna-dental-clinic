@@ -15,7 +15,7 @@ class NewBookingNotification extends Mailable
 
     public function build()
     {
-        return $this->subject('New Booking: ' . ($this->appointment->appointment_date ?? ''))
+        return $this->subject(config('clinic.name') . ' | New Booking: ' . ($this->appointment->appointment_date ?? ''))
             ->markdown('emails.bookings.new_booking', [
                 'appointment' => $this->appointment
             ]);

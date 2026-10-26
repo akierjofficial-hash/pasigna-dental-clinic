@@ -1,11 +1,11 @@
 :root {
-    --kt-skeleton-base: #e8eef6;
-    --kt-skeleton-glint: #f5f8fc;
+    --kt-skeleton-base: #e4d3f5;
+    --kt-skeleton-glint: #f8f2fc;
 }
 
 html[data-theme="dark"] {
-    --kt-skeleton-base: #26364c;
-    --kt-skeleton-glint: #344862;
+    --kt-skeleton-base: #443056;
+    --kt-skeleton-glint: #634c78;
 }
 
 .kt-nav-skeleton[hidden], .kt-results-skeleton[hidden] { display: none !important; }
