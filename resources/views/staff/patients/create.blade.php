@@ -453,7 +453,7 @@ html[data-theme="dark"] .warn-box .text-muted{
         <div class="card-head">
             <div class="section-title">
                 <i class="fa fa-user"></i> Patient Information Record
-                <span class="badge-mini">Required: name, birthdate, sex, address, mobile, occupation</span>
+                <span class="badge-mini">Required: name and sex</span>
             </div>
             <div class="hint">Fields marked <span class="text-danger">*</span> are required.</div>
         </div>
@@ -475,8 +475,8 @@ html[data-theme="dark"] .warn-box .text-muted{
                 </div>
 
                 <div class="col-12 col-md-4">
-                    <label class="form-labelx">Birthdate <span class="text-danger">*</span></label>
-                    <input type="date" name="birthdate" class="inputx" value="{{ old('birthdate') }}" required>
+                    <label class="form-labelx">Birthdate <span class="text-muted">(optional)</span></label>
+                    <input type="date" name="birthdate" class="inputx" value="{{ old('birthdate') }}">
                 </div>
 
                 <div class="col-12 col-md-4">

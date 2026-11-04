@@ -427,7 +427,7 @@
 
                 <table class="row-table">
                     <tr>
-                        <td class="lbl">Birthdate (mm/dd/yyyy):<span class="req">✓</span></td>
+                        <td class="lbl">Birthdate (mm/dd/yyyy):</td>
                         <td class="line"><span class="val">{{ $fmtDate($patient->birthdate) }}</span></td>
                     </tr>
                 </table>
