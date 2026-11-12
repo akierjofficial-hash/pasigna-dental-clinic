@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/visit-procedures.css') }}">
 @endpush
 
+@include('staff.partials.patient-select-assets')
 @section('content')
 
 <style>
@@ -589,9 +590,6 @@
 </style>
 
 {{-- Tom Select CDN (no jQuery) --}}
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css">
-<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-
 <div class="page-wrap">
     <div class="page-head form-max">
         <div>
@@ -651,7 +649,7 @@
                         <label class="form-labelx">Patient <span class="text-danger">*</span></label>
 
                         {{-- ✅ Searchable dropdown --}}
-                        <select name="patient_id" id="patientSelect" class="selectx" required>
+                        <select data-patient-search name="patient_id" id="patientSelect" class="selectx" required>
                             <option value="">-- Select Patient --</option>
                             @foreach($patients as $patient)
                                 <option value="{{ $patient->id }}"
@@ -848,15 +846,7 @@
 (() => {
     // ✅ Searchable Patient Dropdown (Tom Select)
     const patientSelectEl = document.getElementById('patientSelect');
-    if (patientSelectEl && window.TomSelect) {
-        new TomSelect(patientSelectEl, {
-            create: false,
-            placeholder: 'Search patient…',
-            allowEmptyOption: true,
-            maxOptions: 5000,
-            sortField: [{ field: "text", direction: "asc" }],
-        });
-    }
+
 
     let procedures = [];
     const selectedTeeth = new Set();

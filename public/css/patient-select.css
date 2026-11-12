@@ -1,0 +1,22 @@
+.patient-search { width: 100%; min-width: 0; }
+.patient-search .ts-control {
+    min-height: 48px; padding: 11px 32px 11px 12px !important;
+    border: 1px solid var(--kt-border) !important; border-radius: 10px;
+    background: var(--kt-surface) !important; color: var(--kt-text) !important;
+    font-size: 16px !important;
+}
+.patient-search .ts-control > input {
+    font-size: 16px !important; min-height: 24px !important;
+    border: 0 !important; box-shadow: none !important; outline: none !important;
+    padding: 0 !important; width: auto !important; background: transparent !important;
+    color: var(--kt-text) !important;
+}
+.patient-search.focus .ts-control { outline: 3px solid #B78CD4; outline-offset: 2px; }
+.patient-search .ts-dropdown {
+    z-index: 1080; background: var(--kt-surface); color: var(--kt-text);
+    border: 1px solid var(--kt-border); border-radius: 10px;
+}
+.patient-search .ts-dropdown-content { max-height: min(260px, 40vh); overscroll-behavior: contain; }
+.patient-search .ts-dropdown .option { min-height: 48px; padding: 12px; white-space: normal; }
+.patient-search .ts-dropdown .active { background: #563682 !important; color: #fff !important; }
+.patient-search .clear-button { min-width: 30px; text-align: center; font-size: 22px; }

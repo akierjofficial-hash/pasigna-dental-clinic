@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/visit-procedures.css') }}">
 @endpush
 
+@include('staff.partials.patient-select-assets')
 @section('content')
 
 <style>
@@ -549,7 +550,7 @@
                     {{-- Patient --}}
                     <div class="col-md-6">
                         <label class="form-labelx">Patient <span class="text-danger">*</span></label>
-                        <select name="patient_id" class="selectx" required>
+                        <select data-patient-search name="patient_id" class="selectx" required>
                             <option value="">-- Select Patient --</option>
                             @foreach($patients as $patient)
                                 <option value="{{ $patient->id }}" {{ (int)$visit->patient_id === (int)$patient->id ? 'selected' : '' }}>

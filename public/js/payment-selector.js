@@ -69,7 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', event => {
         const button = event.target.closest('.js-plan-pay');
         if (!button) return;
-        patient.value = button.dataset.patient;
+        if (patient.tomselect) patient.tomselect.setValue(button.dataset.patient, true);
+        else patient.value = button.dataset.patient;
         wanted = button.dataset.target;
         load(true);
     });
