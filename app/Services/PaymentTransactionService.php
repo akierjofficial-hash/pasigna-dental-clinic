@@ -110,6 +110,7 @@ class PaymentTransactionService
                 $row->balance_after = $model ? $this->ordinaryBalanceAfter($model) : 0;
                 $row->show_url = route('staff.payments.show', $row->source_id);
                 $row->edit_url = route('staff.payments.edit', $row->source_id);
+                $row->delete_url = route('staff.payments.destroy', $row->source_id);
             } else {
                 $model = $planModels->get($row->source_id);
                 $dp = $model ? $this->finance->downpaymentPayment($model->plan) : null;
@@ -118,6 +119,7 @@ class PaymentTransactionService
                 $row->balance_after = $model ? $this->planBalanceAfter($model) : 0;
                 $row->show_url = $model ? route('staff.installments.show', $model->installment_plan_id) : '#';
                 $row->edit_url = $model ? route('staff.installments.payments.edit', [$model->installment_plan_id, $model->id]) : '#';
+                $row->delete_url = null;
             }
             return $row;
         }));

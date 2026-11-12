@@ -128,7 +128,7 @@ class StaffRecementTest extends TestCase
 
     public function test_legacy_visit_form_also_saves_an_adjusted_recement_charge(): void
     {
-        $this->get(route('staff.visits.create'))->assertOk()->assertSee('Actual charge per treatment / tooth');
+        $this->get(route('staff.visits.create'))->assertOk()->assertSee('Actual charge');
         $this->post(route('staff.visits.store'), [
             'patient_id' => $this->patient->id,
             'doctor_id' => $this->doctor->id,

@@ -1,0 +1,35 @@
+.proc-shell .proc-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+}
+.proc-shell .proc-grid > div { min-width: 0; grid-column: span 2; }
+.proc-shell .proc-grid .proc-service { grid-column: span 6; }
+.proc-shell .proc-grid .proc-charge,
+.proc-shell .proc-grid .proc-tooth { grid-column: span 3; }
+.proc-shell .proc-grid .proc-notes { grid-column: span 6; }
+.proc-shell .proc-grid .proc-context { grid-column: 1 / -1; }
+.proc-shell .proc-grid .proc-add { align-self: end; }
+.proc-shell .proc-grid label { display: block; margin-bottom: 8px; }
+.proc-shell .proc-grid input,
+.proc-shell .proc-grid select,
+.proc-shell .proc-grid button { width: 100%; min-height: 48px; }
+.proc-shell .proc-grid [hidden] { display: none !important; }
+.proc-shell .proc-help { margin-top: 14px; font-size: 13px; line-height: 1.6; }
+.proc-table .procedure-charge { width: 170px; max-width: 100%; margin-top: 10px; }
+.proc-table .procedure-charge label { font-size: 12px; margin-bottom: 5px; }
+.proc-table .procedure-charge input { min-height: 42px; }
+@media (max-width: 992px) {
+    .proc-shell .proc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .proc-shell .proc-grid > div,
+    .proc-shell .proc-grid .proc-charge,
+    .proc-shell .proc-grid .proc-tooth { grid-column: span 1; }
+    .proc-shell .proc-grid .proc-service,
+    .proc-shell .proc-grid .proc-notes,
+    .proc-shell .proc-grid .proc-context,
+    .proc-shell .proc-grid .proc-add { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) {
+    .proc-shell .proc-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+    .proc-shell .proc-grid > div { grid-column: 1 / -1; }
+}

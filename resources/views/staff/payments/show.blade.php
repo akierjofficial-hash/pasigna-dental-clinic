@@ -351,6 +351,10 @@
         <a href="{{ route('staff.payments.edit', [$payment->id, 'return' => url()->full()]) }}" class="p-btn p-btn-primary">
             <i class="fa fa-pen"></i> Edit
         </a>
+        @include('staff.payments.partials.delete', [
+            'deleteUrl' => route('staff.payments.destroy', $payment),
+            'deleteReturn' => route('staff.payments.index'),
+        ])
     </div>
 </div>
 

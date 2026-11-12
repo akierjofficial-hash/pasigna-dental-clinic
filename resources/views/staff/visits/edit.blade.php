@@ -1,5 +1,9 @@
 @extends('layouts.staff')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/visit-procedures.css') }}">
+@endpush
+
 @section('content')
 
 <style>
@@ -636,8 +640,7 @@
 
                         <div class="proc-shell">
                             <div class="proc-grid">
-                                <div>
-                                    <label class="form-labelx">Service <span class="text-danger">*</span></label>
+                                <div class="proc-service"><label class="form-labelx">Service <span class="text-danger">*</span></label>
                                     <select id="serviceSelect" class="selectx">
                                         <option value="">-- Select Service --</option>
                                         @foreach($services as $service)
@@ -646,13 +649,11 @@
                                     </select>
                                 </div>
 
-                                <div>
-                                    <label class="form-labelx" for="procedurePrice">Actual charge per treatment / tooth (₱)</label>
+                                <div class="proc-charge"><label class="form-labelx" for="procedurePrice">Actual charge (₱)</label>
                                     <input type="number" id="procedurePrice" class="inputx" min="0" max="99999999.99" step="0.01" value="0.00">
-                                    <div class="helptext">Adjust the charge for this visit and explain in Notes.</div>
+
                                 </div>
-                                <div>
-                                    <label class="form-labelx">Tooth #</label>
+                                <div class="proc-tooth"><label class="form-labelx">Tooth #</label>
                                     <input type="text" id="toothInput" class="inputx" placeholder="11 (or select above)" autocomplete="off">
                                 </div>
 
@@ -666,19 +667,18 @@
                                     <input type="text" id="shadeInput" class="inputx" placeholder="A1">
                                 </div>
 
-                                <div>
-                                    <label class="form-labelx">Notes</label>
+                                <div class="proc-notes"><label class="form-labelx">Notes</label>
                                     <input type="text" id="noteInput" class="inputx" placeholder="Optional">
                                 </div>
 
-                                <div class="d-grid">
+                                <div class="d-grid proc-add">
                                     <button type="button" id="addProcedureBtn" class="btn-primaryx">
                                         <i class="fa fa-plus"></i> Add
                                     </button>
                                 </div>
                             </div>
 
-                            <div class="helptext mt-2">
+                            <div class="helptext proc-help">The charge defaults to the service price and applies to each added row. Adjust it for this visit and explain in Notes.<br>
                                 If you selected multiple teeth, clicking <strong>Add</strong> will create one row per tooth.
                             </div>
                         </div>
@@ -793,8 +793,9 @@ function renderProcedures() {
         table.innerHTML += `
             <tr>
                 <td><span class="cell-chip"><i class="fa fa-stethoscope"></i> ${escapeHtml(p.service_name || '')}</span>
-                    <label class="form-labelx mt-2" for="charge-${i}">Actual charge (₱)</label>
+                    <div class="procedure-charge"><label class="form-labelx" for="charge-${i}">Actual charge (₱)</label>
                     <input type="number" id="charge-${i}" name="procedures[${i}][price]" class="inputx" min="0" max="99999999.99" step="0.01" value="${escapeAttr(p.price ?? '')}" oninput="procedures[${i}].price = this.value" {{ $visit->installmentPlan()->exists() ? 'readonly' : '' }}>
+                    </div>
                 </td>
                 <td>${p.tooth_number ? `<span class="cell-chip">${escapeHtml(p.tooth_number)}</span>` : `<span class="muted-dash">—</span>`}</td>
                 <td>${p.surface ? `<span class="cell-chip">${escapeHtml(p.surface)}</span>` : `<span class="muted-dash">—</span>`}</td>

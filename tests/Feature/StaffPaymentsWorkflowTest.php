@@ -88,7 +88,7 @@ class StaffPaymentsWorkflowTest extends TestCase
     public function test_actual_visit_charge_can_exceed_service_default_and_be_collected(): void
     {
         $doctor = \App\Models\Doctor::create(['name' => 'Test Dentist', 'is_active' => true]);
-        $this->get(route('staff.visits.create'))->assertOk()->assertSeeText('Actual charge per treatment / tooth');
+        $this->get(route('staff.visits.create'))->assertOk()->assertSeeText('Actual charge');
         $this->post(route('staff.visits.store'), [
             'patient_id' => $this->patient->id, 'doctor_id' => $doctor->id, 'visit_date' => '2026-09-25',
             'procedures' => [['service_id' => $this->service->id, 'price' => '2000.00', 'notes' => 'Deep cleaning']],
@@ -155,6 +155,38 @@ class StaffPaymentsWorkflowTest extends TestCase
         $other = Patient::create(['first_name' => 'Other', 'last_name' => 'Patient']);
         $this->post(route('staff.payments.record'), $this->payload(['patient_id' => $other->id]))->assertSessionHasErrors('target_id');
         $this->assertDatabaseCount('payments', 0);
+    }
+
+    public function test_staff_can_delete_and_undo_a_visit_payment_and_balances_recover(): void
+    {
+        $this->post(route('staff.payments.record'), $this->payload(['amount' => 1000]))
+            ->assertRedirect()->assertSessionHasNoErrors();
+        $payment = Payment::firstOrFail();
+        $this->get(route('staff.payments.index'))->assertOk()
+            ->assertSee(route('staff.payments.destroy', $payment), false)->assertSee('Delete payment');
+        $this->get(route('staff.payments.show', $payment))->assertOk()->assertSee('Delete payment');
+        $this->assertSame('completed', $this->visit->fresh()->status);
+        $this->delete(route('staff.payments.destroy', $payment), ['return' => route('staff.payments.index')])
+            ->assertRedirect(route('staff.payments.index'))->assertSessionHas('undo');
+        $this->assertSoftDeleted('payments', ['id' => $payment->id]);
+        $this->getJson(route('staff.payments.payable-items', ['patient_id' => $this->patient->id]))
+            ->assertOk()->assertJsonPath('items.0.balance', 1000);
+        $this->get(route('staff.payments.index'))->assertOk()->assertDontSee('PAY-00001');
+        $this->post(route('staff.payments.restore', $payment->id), ['return' => route('staff.payments.index')])
+            ->assertRedirect(route('staff.payments.index'));
+        $this->assertNotSoftDeleted('payments', ['id' => $payment->id]);
+        $this->assertSame('completed', $this->visit->fresh()->status);
+        $this->getJson(route('staff.payments.payable-items', ['patient_id' => $this->patient->id]))
+            ->assertOk()->assertJsonCount(0, 'items');
+    }
+
+    public function test_patient_account_cannot_delete_a_visit_payment(): void
+    {
+        $payment = Payment::create(['visit_id' => $this->visit->id, 'amount' => 250,
+            'method' => 'Cash', 'payment_date' => now()]);
+        $this->actingAs(User::factory()->create(['role' => 'user', 'is_active' => true]))
+            ->delete(route('staff.payments.destroy', $payment))->assertForbidden();
+        $this->assertNotSoftDeleted('payments', ['id' => $payment->id]);
     }
 
     public function test_duplicate_submission_token_creates_one_receipt(): void

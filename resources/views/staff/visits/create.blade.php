@@ -1,5 +1,9 @@
 @extends('layouts.staff')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/visit-procedures.css') }}">
+@endpush
+
 @section('content')
 
 <style>
@@ -740,8 +744,7 @@
 
                         <div class="proc-shell">
                             <div class="proc-grid">
-                                <div>
-                                    <label class="form-labelx">Service <span class="text-danger">*</span></label>
+                                <div class="proc-service"><label class="form-labelx">Service <span class="text-danger">*</span></label>
                                     <select id="serviceSelect" class="selectx">
                                         <option value="">-- Select Service --</option>
                                         @foreach($services as $service)
@@ -749,19 +752,18 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div id="recementPriceWrap">
-                                    <label class="form-labelx" for="recementPrice">Actual charge per treatment / tooth (₱)</label>
+                                <div id="recementPriceWrap" class="proc-charge">
+                                    <label class="form-labelx" for="recementPrice">Actual charge (₱)</label>
                                     <input type="number" id="recementPrice" class="inputx" min="0" max="99999999.99" step="0.01" value="500.00">
-                                    <div class="helptext">Defaults to the service price. Adjust for this visit, for example deep cleaning, and explain in Notes.</div>
+
                                 </div>
-                                <div id="recementContextWrap" hidden>
+                                <div id="recementContextWrap" class="proc-context" hidden>
                                     <label class="form-labelx" for="recementContext">Related braces visit or plan (optional)</label>
                                     <select id="recementContext" class="selectx"><option value="">No linked braces record</option></select>
                                     <div class="helptext">Context only. Recement is charged outside the braces plan.</div>
                                 </div>
 
-                                <div>
-                                    <label class="form-labelx">Tooth #</label>
+                                <div class="proc-tooth"><label class="form-labelx">Tooth #</label>
                                     <input type="text" id="toothInput" class="inputx" placeholder="11 (or select above)" autocomplete="off">
                                 </div>
 
@@ -775,19 +777,18 @@
                                     <input type="text" id="shadeInput" class="inputx" placeholder="A1">
                                 </div>
 
-                                <div>
-                                    <label class="form-labelx">Notes</label>
+                                <div class="proc-notes"><label class="form-labelx">Notes</label>
                                     <input type="text" id="noteInput" class="inputx" placeholder="Optional">
                                 </div>
 
-                                <div class="d-grid">
+                                <div class="d-grid proc-add">
                                     <button type="button" id="addProcedureBtn" class="btn-primaryx">
                                         <i class="fa fa-plus"></i> Add
                                     </button>
                                 </div>
                             </div>
 
-                            <div class="helptext mt-2">
+                            <div class="helptext proc-help">The charge defaults to the service price and applies to each added row. Adjust it for this visit and explain in Notes.<br>
                                 <span class="pill">Tip</span>
                                 If you selected multiple teeth, clicking <strong>Add</strong> will create one row per tooth.
                             </div>
