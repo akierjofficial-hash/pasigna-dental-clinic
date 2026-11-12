@@ -749,9 +749,10 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div id="recementPriceWrap" hidden>
-                                    <label class="form-labelx" for="recementPrice">Recement actual charge (₱)</label>
+                                <div id="recementPriceWrap">
+                                    <label class="form-labelx" for="recementPrice">Actual charge per treatment / tooth (₱)</label>
                                     <input type="number" id="recementPrice" class="inputx" min="0" max="99999999.99" step="0.01" value="500.00">
+                                    <div class="helptext">Defaults to the service price. Adjust for this visit, for example deep cleaning, and explain in Notes.</div>
                                 </div>
                                 <div id="recementContextWrap" hidden>
                                     <label class="form-labelx" for="recementContext">Related braces visit or plan (optional)</label>
@@ -949,7 +950,7 @@
             alert('Please select a service.');
             return;
         }
-        if (isRecement && (recementPrice.value === '' || Number(recementPrice.value) < 0)) {
+        if (recementPrice.value === '' || !recementPrice.checkValidity()) {
             flashInvalid(recementPrice);
             recementPrice.focus();
             return;
@@ -968,7 +969,7 @@
                 surface: surfaceInput.value.trim(),
                 shade: shadeInput.value.trim(),
                 notes: noteInput.value.trim(),
-                price: isRecement ? recementPrice.value : '',
+                price: recementPrice.value,
                 related_context: isRecement ? recementContext.value : '',
                 related_label: isRecement && recementContext.value ? recementContext.selectedOptions[0]?.text : '',
             });
@@ -1006,7 +1007,8 @@
     }
     serviceSelect.addEventListener('change', () => {
         const isRecement = serviceSelect.selectedOptions[0]?.dataset.recement === '1';
-        recementPriceWrap.hidden = !isRecement;
+        recementPriceWrap.hidden = false;
+        recementPrice.value = serviceSelect.selectedOptions[0]?.dataset.price || '0.00';
         recementContextWrap.hidden = !isRecement;
         if (isRecement) {
             recementPrice.value = serviceSelect.selectedOptions[0]?.dataset.price || '500.00';

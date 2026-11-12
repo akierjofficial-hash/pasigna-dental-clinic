@@ -29,7 +29,9 @@ class StaffRecementTest extends TestCase
         $this->staff = User::factory()->create(['role' => 'staff', 'is_active' => true]);
         $this->patient = Patient::create(['first_name' => 'Dental', 'last_name' => 'Patient']);
         $this->doctor = Doctor::create(['name' => 'Dr. Recement', 'is_active' => true]);
-        $this->recement = Service::where('internal_code', 'recement')->firstOrFail();
+        $this->recement = Service::firstOrCreate(['internal_code' => 'recement'], [
+            'name' => 'Recement', 'base_price' => 500, 'is_staff_only' => true, 'allow_custom_price' => true,
+        ]);
         $this->actingAs($this->staff);
     }
 
@@ -126,7 +128,7 @@ class StaffRecementTest extends TestCase
 
     public function test_legacy_visit_form_also_saves_an_adjusted_recement_charge(): void
     {
-        $this->get(route('staff.visits.create'))->assertOk()->assertSee('Recement actual charge');
+        $this->get(route('staff.visits.create'))->assertOk()->assertSee('Actual charge per treatment / tooth');
         $this->post(route('staff.visits.store'), [
             'patient_id' => $this->patient->id,
             'doctor_id' => $this->doctor->id,

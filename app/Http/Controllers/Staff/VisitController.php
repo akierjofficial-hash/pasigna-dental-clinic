@@ -201,7 +201,7 @@ return view('staff.visits.index', compact('view', 'patients'));
                 'surface'      => $procedure['surface'] ?? null,
                 'shade'        => $procedure['shade'] ?? null,
                 'notes'        => $procedure['notes'] ?? null,
-                'price'        => $service?->isRecement() && isset($procedure['price'])
+                'price'        => isset($procedure['price'])
                     ? $procedure['price'] : ($service?->base_price ?? 0),
                 ...$contexts[$index],
             ]);
@@ -258,12 +258,14 @@ return view('staff.visits.index', compact('view', 'patients'));
             'procedures.*.surface'      => 'nullable|string|max:10',
             'procedures.*.shade'        => 'nullable|string|max:10',
             'procedures.*.notes'        => 'nullable|string|max:2000',
+            'procedures.*.price'        => 'nullable|numeric|decimal:0,2|min:0|max:99999999.99',
         ]);
 
         \Illuminate\Support\Facades\DB::transaction(function () use ($validated, $visit) {
         $visit = Visit::whereKey($visit->id)->lockForUpdate()->firstOrFail();
         $doctor = Doctor::findOrFail($validated['doctor_id']);
         $existing = $visit->procedures()->get();
+        $pricesChanged = false;
         if ((int) $visit->patient_id !== (int) $validated['patient_id']
             && $existing->contains(fn ($procedure) => $procedure->related_visit_id || $procedure->related_installment_plan_id)) {
             throw ValidationException::withMessages([
@@ -282,13 +284,23 @@ return view('staff.visits.index', compact('view', 'patients'));
         foreach ($validated['procedures'] as $procedure) {
             $service = Service::find($procedure['service_id']);
             $saved = !empty($procedure['id']) ? $existing->firstWhere('id', $procedure['id']) : $existing->first(fn ($p) => !in_array($p->id, $kept) && $p->service_id == $procedure['service_id'] && (string) $p->tooth_number === (string) ($procedure['tooth_number'] ?? ''));
+            $price = $procedure['price'] ?? ($saved ? $saved->price : ($service?->base_price ?? 0));
+            $priceChanged = isset($procedure['price']) && (!$saved || ($saved->price === null
+                || round((float) $price, 2) !== round((float) $saved->price, 2)));
+            if ($priceChanged && $visit->installmentPlan()->exists()) {
+                throw ValidationException::withMessages(['procedures' => 'This visit has an installment agreement. Review its plan before changing treatment charges.']);
+            }
+            if ($saved && $priceChanged && (float) $price < (float) $visit->payments()->where('visit_procedure_id', $saved->id)->sum('amount')) {
+                throw ValidationException::withMessages(['procedures' => 'A treatment charge cannot be lower than payments already recorded for it.']);
+            }
+            $pricesChanged = $pricesChanged || $priceChanged;
             $attributes = [
                 'service_id'   => $procedure['service_id'],
                 'tooth_number' => $procedure['tooth_number'] ?? null,
                 'surface'      => $procedure['surface'] ?? null,
                 'shade'        => $procedure['shade'] ?? null,
                 'notes'        => $procedure['notes'] ?? null,
-                'price'        => $saved ? $saved->price : ($service?->base_price ?? 0),
+                'price'        => $price,
                 'related_visit_id' => $service?->isRecement() ? $saved?->related_visit_id : null,
                 'related_installment_plan_id' => $service?->isRecement() ? $saved?->related_installment_plan_id : null,
             ];
@@ -300,6 +312,15 @@ return view('staff.visits.index', compact('view', 'patients'));
             $kept[] = $saved->id;
         }
         $visit->procedures()->whereNotIn('id', $kept)->delete();
+        if ($pricesChanged) {
+            $total = (float) $visit->procedures()->sum('price');
+            if ($total < (float) $visit->payments()->sum('amount')) {
+                throw ValidationException::withMessages(['procedures' => 'The visit charge cannot be lower than payments already recorded.']);
+            }
+            // Explicitly changing procedure charges replaces an older visit-total override.
+            $visit->update(['price' => null]);
+            app(FinancialService::class)->syncVisitStatus($visit);
+        }
         });
 
         return $this->ktRedirectToReturn($request, 'staff.visits.index')

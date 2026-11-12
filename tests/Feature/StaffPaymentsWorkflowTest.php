@@ -85,6 +85,60 @@ class StaffPaymentsWorkflowTest extends TestCase
             ->assertJsonPath('message', 'No unpaid visits or active plans for this patient. Check that the visit was saved and has a remaining balance.');
     }
 
+    public function test_actual_visit_charge_can_exceed_service_default_and_be_collected(): void
+    {
+        $doctor = \App\Models\Doctor::create(['name' => 'Test Dentist', 'is_active' => true]);
+        $this->get(route('staff.visits.create'))->assertOk()->assertSeeText('Actual charge per treatment / tooth');
+        $this->post(route('staff.visits.store'), [
+            'patient_id' => $this->patient->id, 'doctor_id' => $doctor->id, 'visit_date' => '2026-09-25',
+            'procedures' => [['service_id' => $this->service->id, 'price' => '2000.00', 'notes' => 'Deep cleaning']],
+        ])->assertRedirect()->assertSessionHasNoErrors();
+        $visit = Visit::latest('id')->firstOrFail();
+        $this->assertEquals(2000, $visit->procedures()->firstOrFail()->price);
+        $this->assertEquals(1000, $this->service->fresh()->base_price);
+        $this->getJson(route('staff.payments.payable-items', ['patient_id' => $this->patient->id]))
+            ->assertOk()->assertJsonFragment(['type' => 'visit', 'id' => $visit->id, 'balance' => 2000]);
+        $this->post(route('staff.payments.record'), $this->payload(['target_id' => $visit->id, 'amount' => 2000]))
+            ->assertRedirect()->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('payments', ['visit_id' => $visit->id, 'amount' => 2000]);
+    }
+
+    public function test_edit_actual_charge_replaces_legacy_override_and_preserves_receipts(): void
+    {
+        $doctor = \App\Models\Doctor::create(['name' => 'Test Dentist', 'is_active' => true]);
+        $procedure = $this->visit->procedures()->firstOrFail();
+        $this->visit->update(['price' => 1000]);
+        $this->get(route('staff.visits.edit', $this->visit))->assertOk()->assertSeeText('Actual charge');
+        Payment::create(['visit_id' => $this->visit->id, 'amount' => 500, 'method' => 'Cash', 'payment_date' => now()]);
+        $data = ['patient_id' => $this->patient->id, 'doctor_id' => $doctor->id, 'visit_date' => '2026-09-25',
+            'procedures' => [['id' => $procedure->id, 'service_id' => $this->service->id, 'price' => '2000.00']]];
+        $this->put(route('staff.visits.update', $this->visit), $data)->assertRedirect()->assertSessionHasNoErrors();
+        $this->assertNull($this->visit->fresh()->price);
+        $this->assertEquals(2000, $procedure->fresh()->price);
+        $this->getJson(route('staff.payments.payable-items', ['patient_id' => $this->patient->id]))
+            ->assertOk()->assertJsonPath('items.0.balance', 1500);
+        $data['procedures'][0]['price'] = '400.00';
+        $this->put(route('staff.visits.update', $this->visit), $data)->assertSessionHasErrors('procedures');
+        $this->assertEquals(2000, $procedure->fresh()->price);
+        $this->assertDatabaseCount('payments', 1);
+    }
+
+    public function test_visit_charge_validation_and_installment_price_protection(): void
+    {
+        $doctor = \App\Models\Doctor::create(['name' => 'Test Dentist', 'is_active' => true]);
+        $procedure = $this->visit->procedures()->firstOrFail();
+        $data = ['patient_id' => $this->patient->id, 'doctor_id' => $doctor->id, 'visit_date' => '2026-09-25',
+            'procedures' => [['id' => $procedure->id, 'service_id' => $this->service->id, 'price' => '-1']]];
+        foreach (['-1', '12.345', '100000000', 'invalid'] as $invalid) {
+            $data['procedures'][0]['price'] = $invalid;
+            $this->put(route('staff.visits.update', $this->visit), $data)->assertSessionHasErrors('procedures.0.price');
+        }
+        $this->plan();
+        $data['procedures'][0]['price'] = '2000.00';
+        $this->put(route('staff.visits.update', $this->visit), $data)->assertSessionHasErrors('procedures');
+        $this->assertEquals(1000, $procedure->fresh()->price);
+    }
+
     public function test_visit_payment_preserves_charge_and_does_not_create_a_visit(): void
     {
         $before = Visit::count();

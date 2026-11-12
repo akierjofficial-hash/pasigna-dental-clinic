@@ -641,11 +641,16 @@
                                     <select id="serviceSelect" class="selectx">
                                         <option value="">-- Select Service --</option>
                                         @foreach($services as $service)
-                                            <option value="{{ $service->id }}">{{ $service->name }}</option>
+                                            <option value="{{ $service->id }}" data-price="{{ $service->base_price }}">{{ $service->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
+                                <div>
+                                    <label class="form-labelx" for="procedurePrice">Actual charge per treatment / tooth (₱)</label>
+                                    <input type="number" id="procedurePrice" class="inputx" min="0" max="99999999.99" step="0.01" value="0.00">
+                                    <div class="helptext">Adjust the charge for this visit and explain in Notes.</div>
+                                </div>
                                 <div>
                                     <label class="form-labelx">Tooth #</label>
                                     <input type="text" id="toothInput" class="inputx" placeholder="11 (or select above)" autocomplete="off">
@@ -679,6 +684,11 @@
                         </div>
 
                         <div class="table-wrap">
+                            @if($visit->installmentPlan()->exists())
+                                <p class="helptext">Treatment charges are locked on this visit because it has an installment agreement. Review the plan to change its agreed cost.</p>
+                            @elseif($visit->price !== null)
+                                <p class="helptext">This visit has a saved total override. Changing a treatment charge will recalculate the total from its treatment charges.</p>
+                            @endif
                             <table class="proc-table">
                                 <thead>
                                     <tr>
@@ -726,10 +736,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ========= Procedures ========= */
+document.getElementById('serviceSelect').addEventListener('change', event => {
+    document.getElementById('procedurePrice').value = event.target.selectedOptions[0]?.dataset.price || '0.00';
+});
 document.getElementById('addProcedureBtn').addEventListener('click', () => {
     const serviceSelect = document.getElementById('serviceSelect');
     const serviceId = serviceSelect.value;
     const serviceName = serviceSelect.options[serviceSelect.selectedIndex]?.text?.trim();
+    const priceInput = document.getElementById('procedurePrice');
+    if (priceInput.value === '' || !priceInput.checkValidity()) {
+        priceInput.reportValidity();
+        return;
+    }
 
     if (!serviceId) {
         alert('Select a service');
@@ -746,6 +764,7 @@ document.getElementById('addProcedureBtn').addEventListener('click', () => {
         procedures.push({
             service_id: serviceId,
             service_name: serviceName || 'Service',
+            price: priceInput.value,
             tooth_number: tn,
             surface: surfaceInput.value.trim(),
             shade: shadeInput.value.trim(),
@@ -773,7 +792,10 @@ function renderProcedures() {
     procedures.forEach((p, i) => {
         table.innerHTML += `
             <tr>
-                <td><span class="cell-chip"><i class="fa fa-stethoscope"></i> ${escapeHtml(p.service_name || '')}</span></td>
+                <td><span class="cell-chip"><i class="fa fa-stethoscope"></i> ${escapeHtml(p.service_name || '')}</span>
+                    <label class="form-labelx mt-2" for="charge-${i}">Actual charge (₱)</label>
+                    <input type="number" id="charge-${i}" name="procedures[${i}][price]" class="inputx" min="0" max="99999999.99" step="0.01" value="${escapeAttr(p.price ?? '')}" oninput="procedures[${i}].price = this.value" {{ $visit->installmentPlan()->exists() ? 'readonly' : '' }}>
+                </td>
                 <td>${p.tooth_number ? `<span class="cell-chip">${escapeHtml(p.tooth_number)}</span>` : `<span class="muted-dash">—</span>`}</td>
                 <td>${p.surface ? `<span class="cell-chip">${escapeHtml(p.surface)}</span>` : `<span class="muted-dash">—</span>`}</td>
                 <td>${p.shade ? `<span class="cell-chip">${escapeHtml(p.shade)}</span>` : `<span class="muted-dash">—</span>`}</td>
