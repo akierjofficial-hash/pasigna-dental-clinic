@@ -79,8 +79,8 @@ class BookingFlowTest extends TestCase
             'name' => 'Doctor A',
             'is_active' => true,
             'working_days' => [1, 2, 3, 4, 5, 6],
-            'work_start_time' => '09:00:00',
-            'work_end_time' => '17:00:00',
+            'work_start_time' => '08:00:00',
+            'work_end_time' => '18:00:00',
         ]);
 
         $doctorB = Doctor::create([
@@ -113,8 +113,63 @@ class BookingFlowTest extends TestCase
             ->json('slots');
 
         $this->assertNotContains('13:00', $slotsForA, 'Selected dentist should not show own occupied hour.');
+        $this->assertNotContains('08:00', $slotsForA, 'Public booking must not start before clinic hours.');
+        $this->assertNotContains('17:00', $slotsForA, 'Public booking must end by clinic closing time.');
         $this->assertContains('13:00', $slotsForB, 'Another dentist can still show the same hour when free.');
         $this->assertNotContains('09:00', $slotsForB, 'Dentist B starts at 1:00 PM, so morning slots must be hidden.');
+    }
+
+    public function test_sunday_is_closed_even_if_a_dentist_schedule_includes_it(): void
+    {
+        $this->travelTo(Carbon::parse('2026-09-28 09:00:00', config('app.timezone')));
+        $user = User::factory()->create(['role' => 'user', 'is_active' => true]);
+        $service = Service::create([
+            'name' => 'Consultation',
+            'base_price' => 600,
+            'allow_custom_price' => false,
+            'duration_minutes' => 60,
+        ]);
+        $doctor = Doctor::create([
+            'name' => 'Dr. Sunday Schedule',
+            'is_active' => true,
+            'working_days' => [1, 2, 3, 4, 5, 6, 7],
+            'work_start_time' => '09:00:00',
+            'work_end_time' => '17:00:00',
+        ]);
+        $sunday = '2026-10-04';
+
+        $this->actingAs($user)
+            ->getJson(route('public.booking.slots', [
+                'service' => $service->id,
+                'date' => $sunday,
+                'doctor_id' => $doctor->id,
+            ]))
+            ->assertOk()
+            ->assertJsonPath('slots', []);
+
+        $this->actingAs($user)
+            ->getJson(route('public.booking.doctors', [
+                'service' => $service->id,
+                'date' => $sunday,
+            ]))
+            ->assertOk()
+            ->assertJsonPath('doctors.0.available', false);
+
+        $this->actingAs($user)
+            ->from(route('public.booking.create', $service))
+            ->post(route('public.booking.store', $service), [
+                'date' => $sunday,
+                'time' => '10:00',
+                'doctor_id' => $doctor->id,
+                'full_name' => 'Booking Patient',
+                'contact' => '09123456789',
+                'address' => 'Sample Address',
+                'birthdate' => '1995-01-01',
+            ])
+            ->assertRedirect(route('public.booking.create', $service))
+            ->assertSessionHasErrors('date');
+
+        $this->assertDatabaseCount('appointments', 0);
     }
 
     public function test_unavailable_dentist_has_no_slots_and_booking_is_blocked_for_that_date(): void

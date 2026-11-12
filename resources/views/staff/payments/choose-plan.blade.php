@@ -15,8 +15,8 @@
         --text: var(--kt-text);
         --muted: var(--kt-muted);
 
-        --brand1: #0d6efd;
-        --brand2: #1e90ff;
+        --brand1: var(--pd-deep);
+        --brand2: var(--pd-primary);
 
         --radius: 18px;
         --soft: rgba(148,163,184,.14);
@@ -260,7 +260,7 @@
             <a href="{{ route('staff.payments.create.cash', ['return' => $ktReturn]) }}" class="plan-card">
                 <div class="plan-top">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="icon-pill" style="background:linear-gradient(135deg,#0d6efd,#1e90ff);">
+                        <div class="icon-pill" style="background:linear-gradient(135deg, var(--pd-deep), var(--pd-primary));">
                             <i class="fa fa-money-bill-wave"></i>
                         </div>
                         <div>

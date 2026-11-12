@@ -8,16 +8,21 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key') }}">
 
-    <title>Krys&Tell</title>
+    @php
+        $routeName = request()->route()?->getName() ?? '';
+        $staffPageTitle = Illuminate\Support\Str::headline(explode('.', $routeName)[1] ?? 'Staff');
+    @endphp
+    <title>@yield('title', $staffPageTitle) | {{ config('clinic.name') }}</title>
 
     {{-- ✅ PWA (Installable App) --}}
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#B07C58">
+    <meta name="theme-color" content="{{ config('clinic.colors.deep') }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Krys&Tell">
-    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <meta name="apple-mobile-web-app-title" content="{{ config('clinic.name') }}">
+    <link rel="apple-touch-icon" href="{{ asset(config('clinic.favicon')) }}">
+    <link rel="icon" type="image/png" href="{{ asset(config('clinic.favicon')) }}">
+    @include('partials.clinic-theme-vars')
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@500;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -30,7 +35,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     @stack('styles')
     {{-- Early load prevents a flash of legacy styling; the final link below fixes cascade order. --}}
-    <link rel="stylesheet" href="{{ asset('css/staff-app.css') }}?v=2">
+    <link rel="stylesheet" href="{{ asset('css/staff-app.css') }}?v={{ @filemtime(public_path('css/staff-app.css')) }}">
     <link rel="stylesheet" href="{{ asset('css/kt-loading.css') }}?v=1">
     <link rel="stylesheet" href="{{ asset('css/kt-required-fields.css') }}?v=2">
     {{-- ✅ IMPORTANT: removed "defer" so Bootstrap is available for inline scripts --}}
@@ -40,7 +45,7 @@
 
     <style>
     /* ==========================================================
-           Krys & Tell — Staff Layout (Dark mode FIXED FOR REAL)
+           Pasigna Dental Clinic staff layout
            + Motion Pack (loader, modal confirm, toasts, micro-animations)
            ========================================================== */
 
@@ -826,11 +831,8 @@
         color: #d97706;
     }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/pasigna-internal.css') }}?v={{ @filemtime(public_path('css/pasigna-internal.css')) }}">
 </head>
-
-@php
-$routeName = request()->route() ? request()->route()->getName() : '';
-@endphp
 
 <body class="kt-staff" data-page="{{ $routeName }}" data-kt-live-scope="@yield('kt_live_scope')"
     data-kt-live-snapshot-url="{{ route('staff.live.snapshot') }}"
@@ -853,11 +855,11 @@ $routeName = request()->route() ? request()->route()->getName() : '';
             <div class="brand">
                 <div class="brand-left">
                     <div class="logo">
-                        <img src="{{ asset('images/krysandtelllogo.jpg') }}" alt="Krys & Tell Logo">
+                        <img src="{{ asset(config('clinic.logo')) }}" alt="" width="44" height="44">
                     </div>
 
                     <div>
-                        <h4>Krys & Tell</h4>
+                        <h4>{{ config('clinic.name') }}</h4>
                         <small>Clinic Management</small>
                     </div>
                 </div>
@@ -1691,7 +1693,8 @@ $routeName = request()->route() ? request()->route()->getName() : '';
 
             <!-- ✅ Global Loader (CONTENT ONLY) -->
             {{-- Loaded after legacy page styles so the Staff design system remains authoritative. --}}
-            <link rel="stylesheet" href="{{ asset('css/staff-app.css') }}?v=2">
+            <link rel="stylesheet" href="{{ asset('css/staff-app.css') }}?v={{ @filemtime(public_path('css/staff-app.css')) }}">
+            <link rel="stylesheet" href="{{ asset('css/pasigna-internal.css') }}?v={{ @filemtime(public_path('css/pasigna-internal.css')) }}">
 
         </div>
     </div>

@@ -1,14 +1,14 @@
-/* Krys & Tell authenticated Staff workspace. Scoped to body.kt-staff. */
+/* Pasigna authenticated staff workspace. Scoped to body.kt-staff. */
 .kt-staff {
-    --staff-bg: #f1f6fc;
+    --staff-bg: #faf7fd;
     --staff-surface: #ffffff;
-    --staff-surface-soft: #f7f9fc;
-    --staff-text: #14213d;
-    --staff-muted: #66758d;
-    --staff-border: #dce5f0;
-    --staff-primary: #0877e8;
-    --staff-primary-dark: #075fae;
-    --staff-primary-soft: #eaf3ff;
+    --staff-surface-soft: #f5eef9;
+    --staff-text: #3c1e5e;
+    --staff-muted: #685a74;
+    --staff-border: #e4d8ed;
+    --staff-primary: var(--pd-deep);
+    --staff-primary-dark: var(--pd-ink);
+    --staff-primary-soft: #eee1f7;
     --staff-success: #15865c;
     --staff-success-soft: #e4f6ed;
     --staff-warning: #b76b00;
@@ -29,7 +29,7 @@
     --kt-primary: var(--staff-primary) !important;
     --kt-primary-soft: var(--staff-primary-soft) !important;
     --kt-input-bg: var(--staff-surface) !important;
-    --kt-input-border: #cbd7e6 !important;
+    --kt-input-border: #cbb6db !important;
     --kt-radius: var(--staff-radius) !important;
     --kt-radius-sm: var(--staff-radius-sm) !important;
     --kt-shadow: var(--staff-shadow) !important;
@@ -40,15 +40,15 @@
 }
 
 html[data-theme="dark"] .kt-staff {
-    --staff-bg: #0c1422;
-    --staff-surface: #131e2e;
-    --staff-surface-soft: #192638;
-    --staff-text: #edf3fb;
-    --staff-muted: #a9b7ca;
-    --staff-border: #2b3a4f;
-    --staff-primary: #62aaf5;
-    --staff-primary-dark: #8dc2fa;
-    --staff-primary-soft: #183653;
+    --staff-bg: #180f24;
+    --staff-surface: #291b38;
+    --staff-surface-soft: #352545;
+    --staff-text: #f7f1fb;
+    --staff-muted: #cbbbd8;
+    --staff-border: #4e3a60;
+    --staff-primary: var(--pd-soft);
+    --staff-primary-dark: var(--pd-lavender);
+    --staff-primary-soft: #443056;
     --staff-success: #58d39b;
     --staff-success-soft: #173d32;
     --staff-warning: #f6bf55;
@@ -84,8 +84,9 @@ html[data-theme="dark"] .kt-staff {
     margin-bottom: 10px !important;
     border-bottom: 1px solid var(--staff-border) !important;
 }
-.kt-staff .brand .logo { width: 40px !important; height: 40px !important; border-radius: 11px !important; }
-.kt-staff .brand h4 { color: var(--staff-text) !important; font-size: 15px !important; letter-spacing: -.02em; }
+.kt-staff .brand .logo { width: 40px !important; height: 40px !important; border-radius: 11px !important; background: #fff !important; }
+.kt-staff .brand .logo img { object-fit: contain !important; }
+.kt-staff .brand h4 { color: var(--staff-text) !important; font-size: 12px !important; letter-spacing: -.02em; white-space: normal !important; overflow: visible !important; line-height: 1.2 !important; }
 .kt-staff .brand small { color: var(--staff-muted) !important; font-size: 10px !important; }
 .kt-staff .theme-toggle {
     width: 36px !important; height: 36px !important; border-radius: 10px !important;

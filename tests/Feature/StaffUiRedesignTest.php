@@ -13,6 +13,23 @@ class StaffUiRedesignTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_patient_print_header_uses_pasigna_name_and_embedded_logo(): void
+    {
+        $patient = new Patient(['first_name' => 'Preview', 'last_name' => 'Patient']);
+        $html = view('staff.patients.print.patient_information', [
+            'patient' => $patient,
+            'info' => null,
+            'age' => null,
+            'signatureBase64' => null,
+            'consentPatientSignatureBase64' => null,
+            'consentDentistSignatureBase64' => null,
+        ])->render();
+
+        $this->assertStringContainsString(strtoupper(config('clinic.name')), $html);
+        $this->assertStringContainsString('data:image/jpeg;base64,', $html);
+        $this->assertStringNotContainsString('Krys &amp; Tell', $html);
+    }
+
     public function test_all_primary_staff_screens_use_the_scoped_staff_design_system(): void
     {
         $staff = User::factory()->create(['role' => 'staff', 'is_active' => true]);
@@ -48,6 +65,9 @@ class StaffUiRedesignTest extends TestCase
                 ->assertOk()
                 ->assertSee('class="kt-staff"', false)
                 ->assertSee('css/staff-app.css', false)
+                ->assertSee('Pasigna Dental Clinic')
+                ->assertSee('images/PasignaAssets/logo.jpg', false)
+                ->assertDontSee('Krys &amp; Tell', false)
                 ->assertSee('Booking Requests');
         }
     }

@@ -6,19 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="vapid-public-key" content="{{ config('webpush.vapid.public_key') }}">
-    <title>@yield('title', 'Admin') | Krys &amp; Tell</title>
+    <title>@yield('title', 'Admin') | {{ config('clinic.name') }}</title>
     <script>
         try { document.documentElement.setAttribute('data-theme', localStorage.getItem('admin_theme') || 'light'); } catch (e) {}
     </script>
 
     {{-- ✅ PWA (Installable App) --}}
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#10233f">
+    <meta name="theme-color" content="{{ config('clinic.colors.deep') }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Krys&Tell">
-    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <meta name="apple-mobile-web-app-title" content="{{ config('clinic.name') }}">
+    <link rel="apple-touch-icon" href="{{ asset(config('clinic.favicon')) }}">
+    <link rel="icon" type="image/png" href="{{ asset(config('clinic.favicon')) }}">
+    @include('partials.clinic-theme-vars')
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
@@ -632,7 +633,8 @@
     </style>
 
     @stack('styles')
-    <link rel="stylesheet" href="{{ asset('css/admin-app.css') }}?v=1">
+    <link rel="stylesheet" href="{{ asset('css/admin-app.css') }}?v={{ @filemtime(public_path('css/admin-app.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/pasigna-internal.css') }}?v={{ @filemtime(public_path('css/pasigna-internal.css')) }}">
 </head>
 
 <body class="admin-app" data-kt-live-scope="@yield('kt_live_scope')" data-kt-live-snapshot-url="{{ route('admin.live.snapshot') }}"
@@ -671,9 +673,9 @@
             <aside class="side" id="adminSidebar">
                 <div class="brand">
                     <div class="brand-left">
-                        <div class="logo"><img src="{{ asset('images/krysandtelllogo.jpg') }}" alt=""></div>
+                        <div class="logo"><img src="{{ asset(config('clinic.logo')) }}" alt="" width="42" height="42"></div>
                         <div style="min-width:0;">
-                            <div class="name">Krys & Tell</div>
+                            <div class="name">{{ config('clinic.name') }}</div>
                             <div class="sub">Admin Workspace</div>
                         </div>
                     </div>

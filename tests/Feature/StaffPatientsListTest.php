@@ -144,6 +144,33 @@ class StaffPatientsListTest extends TestCase
         $this->get(route('staff.patients.edit', ['patient' => $patient, 'return' => $return]))->assertOk();
     }
 
+    public function test_staff_can_create_and_update_a_patient_without_an_email_address(): void
+    {
+        $this->post(route('staff.patients.store'), [
+            'first_name' => 'Email',
+            'last_name' => 'Optional',
+            'birthdate' => '1995-06-15',
+            'gender' => 'Female',
+            'contact_number' => '09171234567',
+            'address' => 'Sample Address',
+        ])->assertRedirect(route('staff.patients.index'));
+
+        $patient = Patient::where('first_name', 'Email')->where('last_name', 'Optional')->sole();
+        $this->assertNull($patient->email);
+
+        $this->put(route('staff.patients.update', $patient), [
+            'first_name' => 'Email',
+            'last_name' => 'Optional',
+            'birthdate' => '1995-06-15',
+            'gender' => 'Female',
+            'contact_number' => '09171234567',
+            'address' => 'Sample Address',
+            'occupation' => 'Teacher',
+        ])->assertRedirect(route('staff.patients.index'));
+
+        $this->assertNull($patient->fresh()->email);
+    }
+
     public function test_invalid_page_recovers_to_last_available_page(): void
     {
         foreach (range(1, 30) as $i) $this->patient("Page{$i}", "Patient{$i}");

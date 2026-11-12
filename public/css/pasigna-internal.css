@@ -1,0 +1,78 @@
+/* Clinic colors come from config/clinic.php through clinic-theme-vars.blade.php. */
+.admin-app .brand-left > div:last-child,
+.kt-staff .brand-left > div:last-child { min-width: 0; }
+.admin-app .brand .name,
+.kt-staff .brand h4 { overflow-wrap: anywhere; text-overflow: clip; }
+.admin-app .logo,
+.kt-staff .brand .logo { background: #fff !important; }
+.admin-app .logo img,
+.kt-staff .brand .logo img { object-fit: contain !important; }
+
+/* Brand actions and navigation. Semantic success, warning and danger colors stay intact. */
+.admin-app .navx a.active { background: var(--pd-primary) !important; }
+.admin-app .admin-topbar-copy .admin-workspace-label,
+.kt-staff .staff-context span { color: var(--pd-primary); }
+.admin-app :is(a, button, input, select, textarea):focus-visible,
+.kt-staff :is(a, button, input, select, textarea):focus-visible { outline: 3px solid var(--pd-accent) !important; outline-offset: 2px !important; }
+.admin-app :is(.form-control,.form-select,.kt-input,.kt-select,.kt-control):focus,
+.kt-staff .content :is(.form-control,.form-select,input,select,textarea):focus { border-color: var(--pd-primary) !important; box-shadow: 0 0 0 3px rgba(157,102,185,.2) !important; }
+.admin-app :is(.btn-primary,.btn-cta,.btn-primaryx,.kt-primary,.du-btn-primary),
+.kt-staff .content :is(.btn-primary,.btn-primaryx,.btnx-primary,.p-btn-primary,.i-btn-primary,.submit-btn,.pbtn.primary) { background: var(--pd-deep) !important; border-color: var(--pd-deep) !important; color: #fff !important; }
+.admin-app :is(.btn-primary,.btn-cta,.btn-primaryx,.kt-primary,.du-btn-primary):hover,
+.kt-staff .content :is(.btn-primary,.btn-primaryx,.btnx-primary,.p-btn-primary,.i-btn-primary,.submit-btn,.pbtn.primary):hover { background: var(--pd-ink) !important; border-color: var(--pd-ink) !important; }
+.admin-app :is(.btn-outline-primary,.text-primary,.page-link,.tabbtn.active),
+.kt-staff .content :is(.btn-outline-primary,.text-primary,.page-link,.tabx.active,.seg-btn.active) { color: var(--pd-deep) !important; }
+.admin-app :is(.pagination .active .page-link,.page-item.active .page-link),
+.kt-staff .content :is(.pagination .active .page-link,.page-item.active .page-link) { background: var(--pd-deep) !important; border-color: var(--pd-deep) !important; color: #fff !important; }
+.kt-staff .sidebar-menu a { color: var(--staff-muted) !important; }
+.kt-staff .sidebar-menu a i { color: var(--staff-muted); }
+.kt-staff .sidebar-menu a.active { color: var(--pd-deep) !important; background: var(--staff-primary-soft) !important; box-shadow: inset 3px 0 0 var(--pd-primary) !important; }
+.kt-staff .sidebar-menu a.active i { color: var(--pd-deep) !important; }
+.kt-staff .staff-user__avatar { background: var(--pd-deep); color: #fff; }
+.admin-app .admin-avatar { background: var(--pd-primary) !important; color: #fff !important; }
+
+/* Dashboard and list accents inherited from copied blue styles. */
+.admin-app .metric:hover { border-color: var(--pd-medium) !important; }
+.admin-app .clean-row:hover { background: #f7f0fb !important; }
+.admin-app .metric.metric-featured { background: linear-gradient(135deg,#f8f1fc,#eee0f8) !important; border-color: var(--pd-soft) !important; }
+.kt-staff .sd-action:hover,
+.kt-staff .sd-kpi:hover { border-color: var(--pd-medium) !important; }
+.kt-staff :is(.sd-kpi-icon,.sd-avatar) { background: #f1e5f8 !important; color: var(--pd-deep) !important; }
+.kt-staff .sd-next { border-color: var(--pd-medium) !important; color: var(--pd-deep) !important; }
+.kt-staff .sd-count { background: #eee1f7 !important; color: var(--pd-ink) !important; }
+.kt-staff .sd-panel :focus-visible { outline-color: var(--pd-accent) !important; }
+.kt-staff .patients-page :is(.alpha-link.active,.compact-pages .active),
+.kt-staff .payments-page .pbtn.primary { background: var(--pd-deep) !important; border-color: var(--pd-deep) !important; color: #fff !important; }
+.kt-staff .payments-page .tabs a.active { color: var(--pd-deep) !important; border-color: var(--pd-primary) !important; }
+.kt-staff .patients-page :is(.alpha-link:hover,.patient-name:hover,.initial-divider td) { color: var(--pd-deep) !important; }
+.kt-staff .patients-page .patient-avatar { background: #eee1f7 !important; color: var(--pd-deep) !important; }
+.kt-staff .record-assistant__launcher,
+.kt-staff .record-assistant__form button,
+.kt-staff .record-assistant__response--user .record-assistant__reply { background: var(--pd-deep) !important; color: #fff !important; }
+.kt-staff .record-assistant__launcher:hover,
+.kt-staff .record-assistant__form button:hover { background: var(--pd-ink) !important; }
+.kt-staff .record-assistant :is(button,input,a):focus-visible { outline-color: var(--pd-accent) !important; }
+.kt-staff .record-assistant :is(.record-assistant__context-icon,.record-assistant__empty-icon) { background: #eee1f7 !important; color: var(--pd-deep) !important; }
+.kt-staff .record-assistant :is(.record-assistant__patient-actions button,.record-assistant__links a) { color: var(--pd-deep) !important; }
+.kt-staff .record-assistant__links a { border-color: var(--pd-soft) !important; }
+.kt-staff .record-assistant__status--loading::before { background: var(--pd-primary) !important; }
+
+html[data-theme="dark"] .admin-app .brand .name,
+html[data-theme="dark"] .kt-staff .brand h4 { color: #fff !important; }
+html[data-theme="dark"] .admin-app :is(.btn-primary,.btn-cta,.btn-primaryx,.kt-primary,.du-btn-primary) { background: var(--pd-soft) !important; border-color: var(--pd-soft) !important; color: var(--pd-ink) !important; }
+html[data-theme="dark"] .kt-staff .content :is(.btn-primary,.btn-primaryx,.btnx-primary,.p-btn-primary,.i-btn-primary,.submit-btn,.pbtn.primary) { background: var(--pd-soft) !important; border-color: var(--pd-soft) !important; color: var(--pd-ink) !important; }
+html[data-theme="dark"] .admin-app :is(.btn-outline-primary,.text-primary,.page-link,.tabbtn.active),
+html[data-theme="dark"] .kt-staff .content :is(.btn-outline-primary,.text-primary,.page-link,.tabx.active,.seg-btn.active) { color: var(--pd-soft) !important; }
+html[data-theme="dark"] .admin-app :is(.pagination .active .page-link,.page-item.active .page-link),
+html[data-theme="dark"] .kt-staff .content :is(.pagination .active .page-link,.page-item.active .page-link) { color: var(--pd-ink) !important; background: var(--pd-soft) !important; border-color: var(--pd-soft) !important; }
+html[data-theme="dark"] .kt-staff .sidebar-menu a.active { color: var(--pd-soft) !important; }
+html[data-theme="dark"] .kt-staff .sidebar-menu a.active i { color: var(--pd-soft) !important; }
+html[data-theme="dark"] .admin-app .metric.metric-featured { background: linear-gradient(135deg,#352545,#443056) !important; border-color: #6f5487 !important; }
+html[data-theme="dark"] .kt-staff :is(.sd-kpi-icon,.sd-avatar,.sd-count) { background: #443056 !important; color: var(--pd-lavender) !important; }
+html[data-theme="dark"] .kt-staff .sd-next,
+html[data-theme="dark"] .kt-staff .payments-page .tabs a.active { color: var(--pd-soft) !important; }
+html[data-theme="dark"] .kt-staff .patients-page .patient-avatar { background: #443056 !important; color: var(--pd-lavender) !important; }
+
+@media print {
+    .admin-app, .kt-staff { background: #fff !important; color: #111 !important; }
+}

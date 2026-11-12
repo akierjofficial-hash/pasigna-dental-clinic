@@ -408,6 +408,20 @@
                             </form>
                         </article>
 
+                        @if($user->role === 'user')
+                            <article class="kt-profile-form-card">
+                                <h2>Google sign-in</h2>
+                                @if($user->google_id)
+                                    <p>Google is connected to this patient account.</p>
+                                @else
+                                    <p>Connect Google after signing in to this account. Use a Google account with the same verified email address.</p>
+                                    @if(config('services.google.client_id') && config('services.google.client_secret') && config('services.google.redirect'))
+                                        <a class="kt-btn-primary kt-profile-submit" href="{{ route('google.link') }}"><span>Connect Google</span></a>
+                                    @endif
+                                @endif
+                            </article>
+                        @endif
+
                         <article class="kt-profile-form-card">
                             <h2>{{ $hasLocalPassword ? 'Change Password' : 'Set Password' }}</h2>
                             <p>

@@ -181,8 +181,9 @@ class PaymentController extends Controller
     {
         $validated = $request->validate(['patient_id' => 'required|exists:patients,id']);
         $patientId = (int) $validated['patient_id'];
-        $visits = Visit::with(['procedures.service', 'payments'])
-            ->where('patient_id', $patientId)->whereDoesntHave('installmentPlan')->orderByDesc('visit_date')->get()
+        $ordinaryVisits = Visit::with(['procedures.service', 'payments'])
+            ->where('patient_id', $patientId)->whereDoesntHave('installmentPlan')->orderByDesc('visit_date')->get();
+        $visits = $ordinaryVisits
             ->map(function ($visit) use ($finance) {
                 $balance = $finance->visitBalance($visit);
                 $services = $visit->procedures->pluck('service.name')->filter()->unique()->join(', ');
@@ -209,7 +210,14 @@ class PaymentController extends Controller
                 'label' => 'Plan #' . $plan->id . ' · ' . ($plan->service?->name ?: 'Treatment plan')
                     . ($plan->hasUnknownTotal() ? ' · Open monthly — no final total' : '')])
             ->filter(fn ($item) => $item['unknown_total'] || $item['balance'] > 0)->values();
-        return response()->json(['items' => $visits->concat($recementOnPlans)->concat($plans)->values()]);
+        $items = $visits->concat($recementOnPlans)->concat($plans)->values();
+        $message = null;
+        if ($items->isEmpty()) {
+            $message = $ordinaryVisits->contains(fn ($visit) => $finance->visitCharge($visit) <= 0)
+                ? 'No payable balance. A visit has no positive charge; review its treatment prices before recording payment.'
+                : 'No unpaid visits or active plans for this patient. Check that the visit was saved and has a remaining balance.';
+        }
+        return response()->json(['items' => $items, 'message' => $message]);
     }
 
     public function record(Request $request, PaymentWorkflowService $workflow)

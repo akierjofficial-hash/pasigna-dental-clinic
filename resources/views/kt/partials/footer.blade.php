@@ -2,7 +2,7 @@
     <div class="pd-container pd-footer-grid">
         <div>
             <a class="pd-brand pd-footer-brand" href="{{ route('public.home') }}">
-                <img src="{{ asset('images/PasignaAssets/logo.jpg') }}" width="64" height="64" alt="Pasigna Dental Clinic logo" loading="lazy">
+                <img src="{{ asset(config('clinic.logo')) }}" width="64" height="64" alt="Pasigna Dental Clinic logo" loading="lazy">
                 <span>{{ config('clinic.name') }}<small>{{ config('clinic.city') }}</small></span>
             </a>
             <p>{{ config('clinic.tagline') }}</p>
@@ -21,6 +21,7 @@
             @if(config('clinic.hours'))<p>{{ config('clinic.hours') }}</p>@endif
             @if(config('clinic.phone'))<a href="tel:{{ preg_replace('/[^+\d]/', '', config('clinic.phone')) }}">{{ config('clinic.phone') }}</a>@endif
             @if(config('clinic.email'))<a href="mailto:{{ config('clinic.email') }}">{{ config('clinic.email') }}</a>@endif
+            @if(config('clinic.facebook'))<a href="{{ config('clinic.facebook') }}" rel="noopener noreferrer">Facebook</a>@endif
             <a href="{{ route('userlogin') }}">Patient login</a>
         </div>
     </div>

@@ -60,7 +60,7 @@
                     <div class="kt-info-item__icon">Hours</div>
                     <div class="kt-info-item__text">
                         <strong>Opening Hours</strong>
-                        <span>Mon-Sat: 9:00 AM to 6:00 PM</span>
+                        <span>{{ config('clinic.hours') ?: 'Contact the clinic for current hours' }}</span>
                     </div>
                 </div>
                 <div class="kt-info-item">

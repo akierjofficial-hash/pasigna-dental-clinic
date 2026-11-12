@@ -1,4 +1,4 @@
-/* Krys & Tell — Web Push helper
+/* Pasigna Dental Clinic — Web Push helper
    - Requires a user gesture to request permission (we bind to a button)
    - Stores subscription in Laravel via POST /push/subscribe
 */

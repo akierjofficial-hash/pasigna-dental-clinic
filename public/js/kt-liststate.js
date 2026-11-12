@@ -1,5 +1,5 @@
 /*
- * Krys&Tell — List State + Return URL helpers
+ * Pasigna Dental Clinic — List State + Return URL helpers
  *
  * Goals:
  * - Keep client-side filters (q/sort/tab/etc.) synced to the URL query string

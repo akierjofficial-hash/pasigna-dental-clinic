@@ -1,21 +1,14 @@
-echo "✅ Running 00-laravel-deploy.sh"
-php artisan migrate:status || true
-
 #!/usr/bin/env bash
 set -e
+
+echo "Running Pasigna Laravel startup tasks"
 
 mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
 chmod -R 775 storage bootstrap/cache || true
 
-composer install --no-dev --optimize-autoloader
-
 php artisan optimize:clear || true
 
 php artisan migrate --force
-php artisan db:seed --force
-
-# 👇 PRINT seeded user check into Render logs (no shell needed)
-php artisan users:check-seeds || true
 
 php artisan config:cache || true
 php artisan route:cache || true

@@ -5,6 +5,25 @@
   var links = document.getElementById('pd-nav-links');
   if (!toggle || !links) return;
 
+  var homeLink = links.querySelector('[data-pd-nav-home]');
+  var galleryLink = links.querySelector('[data-pd-nav-gallery]');
+  var isHomePage = homeLink && homeLink.getAttribute('aria-current') === 'page';
+
+  function syncGalleryNav() {
+    if (!isHomePage || !galleryLink) return;
+    var atGallery = window.location.hash === '#gallery';
+    if (atGallery) {
+      homeLink.removeAttribute('aria-current');
+      galleryLink.setAttribute('aria-current', 'location');
+    } else {
+      homeLink.setAttribute('aria-current', 'page');
+      galleryLink.removeAttribute('aria-current');
+    }
+  }
+
+  syncGalleryNav();
+  window.addEventListener('hashchange', syncGalleryNav);
+
   function setOpen(open) {
     links.classList.toggle('is-open', open);
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');

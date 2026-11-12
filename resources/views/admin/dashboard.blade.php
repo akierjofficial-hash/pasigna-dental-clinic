@@ -35,6 +35,23 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 const adminChart = document.getElementById('collectionsChart');
-if (adminChart) new Chart(adminChart,{type:'bar',data:{labels:@json($collectionLabels),datasets:[{data:@json($collectionValues),backgroundColor:'#2563eb',borderRadius:6}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{beginAtZero:true,ticks:{callback:v=>'₱'+Number(v).toLocaleString()}}}}});
+if (adminChart) {
+    const themeValue = name => getComputedStyle(document.body).getPropertyValue(name).trim();
+    const chart = new Chart(adminChart, {
+        type: 'bar',
+        data: { labels: @json($collectionLabels), datasets: [{ data: @json($collectionValues), backgroundColor: themeValue('--admin-primary'), borderRadius: 6 }] },
+        options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: {
+            x: { grid: { display: false }, ticks: { color: themeValue('--admin-muted') } },
+            y: { beginAtZero: true, grid: { color: themeValue('--admin-border') }, ticks: { color: themeValue('--admin-muted'), callback: v => '₱' + Number(v).toLocaleString() } }
+        } }
+    });
+    new MutationObserver(() => {
+        chart.data.datasets[0].backgroundColor = themeValue('--admin-primary');
+        chart.options.scales.x.ticks.color = themeValue('--admin-muted');
+        chart.options.scales.y.ticks.color = themeValue('--admin-muted');
+        chart.options.scales.y.grid.color = themeValue('--admin-border');
+        chart.update('none');
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
 </script>
 @endpush

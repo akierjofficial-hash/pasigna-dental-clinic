@@ -1,5 +1,5 @@
 @component('mail::message')
-# New Booking Submitted ✅
+# New Booking Submitted to {{ config('clinic.name') }} ✅
 
 **Patient:** {{ $appointment->public_name ?? trim(($appointment->public_first_name ?? '').' '.($appointment->public_last_name ?? '')) ?? '—' }}
 
@@ -16,5 +16,5 @@ View Appointment
 @endcomponent
 
 Thanks,<br>
-{{ config('app.name') }}
+{{ config('clinic.name') }}
 @endcomponent

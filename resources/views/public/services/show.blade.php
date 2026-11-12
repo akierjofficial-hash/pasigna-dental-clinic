@@ -16,7 +16,6 @@
         <div>
             <h2 class="pd-title">Plan your visit</h2>
             @if($service->duration_minutes)<p class="pd-copy"><strong>Listed duration:</strong> {{ $service->duration_minutes }} minutes</p>@endif
-            @if($service->base_price !== null)<p class="pd-copy"><strong>Listed base price:</strong> ₱{{ number_format((float) $service->base_price, 2) }}</p>@endif
             <p class="pd-copy">Sign in to your patient account to request an appointment. Clinic staff review requests before confirmation.</p>
             <div class="pd-actions">
                 <a class="pd-button" href="{{ auth()->check() ? $bookUrl : route('userlogin', ['redirect' => $bookUrl]) }}">Request an Appointment</a>

@@ -16,8 +16,8 @@
         --muted: var(--kt-muted);
 
         --soft: rgba(148,163,184,.14);
-        --brand1:#0d6efd;
-        --brand2:#1e90ff;
+        --brand1:var(--pd-deep);
+        --brand2:var(--pd-primary);
 
         --radius: 16px;
     }

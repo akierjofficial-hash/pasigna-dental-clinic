@@ -455,9 +455,9 @@ $isMinorChecked = old('is_minor', $info?->is_minor ? 1 : 0) ? true : false;
                 </div>
 
                 <div class="col-12 col-md-4">
-                    <label class="form-labelx">Birthdate <span class="text-danger">*</span></label>
+                    <label class="form-labelx">Birthdate <span class="text-muted">(optional)</span></label>
                     <input type="date" name="birthdate" class="inputx"
-                        value="{{ old('birthdate', $patient->birthdate) }}" required>
+                        value="{{ old('birthdate', $patient->birthdate) }}">
                 </div>
 
                 <div class="col-12 col-md-4">
@@ -500,9 +500,8 @@ $isMinorChecked = old('is_minor', $info?->is_minor ? 1 : 0) ? true : false;
                 </div>
 
                 <div class="col-12 col-md-4">
-                    <label class="form-labelx">Email Add <span class="text-danger">*</span></label>
-                    <input type="email" name="email" class="inputx" value="{{ old('email', $patient->email) }}"
-                        required>
+                    <label class="form-labelx">Email Address (optional)</label>
+                    <input type="email" name="email" class="inputx" value="{{ old('email', $patient->email) }}">
                 </div>
 
                 <div class="col-12 col-md-4">

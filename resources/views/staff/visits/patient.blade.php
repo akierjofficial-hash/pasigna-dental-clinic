@@ -17,8 +17,8 @@
         --muted: var(--kt-muted);
         --muted2: rgba(148,163,184,.70);
 
-        --brand1: #0d6efd;
-        --brand2: #1e90ff;
+        --brand1: var(--pd-deep);
+        --brand2: var(--pd-primary);
         --radius: 16px;
 
         --focus: rgba(96,165,250,.55);

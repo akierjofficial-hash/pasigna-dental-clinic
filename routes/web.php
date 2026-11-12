@@ -136,6 +136,7 @@ Route::middleware('auth')->group(function () {
 
     // Ã¢Å“â€¦ User Profile
     Route::get('/profile', [UserProfileController::class, 'index'])->name('profile.show');
+    Route::get('/profile/connect-google', [GoogleController::class, 'link'])->name('google.link');
     Route::put('/profile', [UserProfileController::class, 'update'])->name('user.profile.update');
     Route::put('/profile/password', [UserProfileController::class, 'updatePassword'])->name('user.profile.password');
 

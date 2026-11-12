@@ -162,7 +162,7 @@
     .btnx:hover{ transform: translateY(-1px); }
     .btnx-primary{
         border: none;
-        background: linear-gradient(135deg, #0d6efd, #1e90ff);
+        background: linear-gradient(135deg, var(--pd-deep), var(--pd-primary));
         color:#fff;
         box-shadow: 0 10px 18px rgba(13,110,253,.20);
     }

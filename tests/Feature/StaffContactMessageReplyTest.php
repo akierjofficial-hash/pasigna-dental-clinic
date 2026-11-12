@@ -13,6 +13,22 @@ class StaffContactMessageReplyTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_reply_preview_uses_pasigna_mail_header_and_footer(): void
+    {
+        $contact = ContactMessage::create([
+            'name' => 'Preview Sender',
+            'email' => 'preview@example.test',
+            'message' => 'Preview message.',
+        ]);
+
+        $html = (new ContactMessageReplyMail($contact, 'Preview reply', 'Preview body.'))->render();
+
+        $this->assertStringContainsString(config('clinic.name'), $html);
+        $this->assertStringContainsString(config('clinic.logo'), $html);
+        $this->assertStringNotContainsString('Krys &amp; Tell', $html);
+        $this->assertStringNotContainsString('Bagacay', $html);
+    }
+
     public function test_staff_can_reply_to_contact_message_and_reply_is_logged(): void
     {
         Mail::fake();
@@ -29,7 +45,7 @@ class StaffContactMessageReplyTest extends TestCase
         ]);
 
         $payload = [
-            'subject' => 'Re: Your message to Krys & Tell',
+            'subject' => 'Re: Your message to Pasigna Dental Clinic',
             'reply_message' => 'Thanks for contacting us. We will assist you shortly.',
         ];
 

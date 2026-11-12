@@ -9,8 +9,8 @@
         --soft: rgba(15, 23, 42, .06);
         --text: #0f172a;
         --muted: rgba(15, 23, 42, .60);
-        --brand1: #0d6efd;
-        --brand2: #1e90ff;
+        --brand1: var(--pd-deep);
+        --brand2: var(--pd-primary);
         --radius: 16px;
     }
 

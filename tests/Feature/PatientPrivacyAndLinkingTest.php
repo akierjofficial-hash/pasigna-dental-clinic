@@ -325,7 +325,8 @@ class PatientPrivacyAndLinkingTest extends TestCase
         $provider->shouldReceive('user')->once()->andReturn($googleUser);
         Socialite::shouldReceive('driver')->once()->with('google')->andReturn($provider);
 
-        $this->get(route('google.callback'))
+        $this->withSession(['google.auth' => ['mode' => 'login', 'user_id' => null, 'redirect' => null]])
+            ->get(route('google.callback'))
             ->assertRedirect(route('userlogin'))
             ->assertSessionHasErrors('email');
         $this->assertGuest();

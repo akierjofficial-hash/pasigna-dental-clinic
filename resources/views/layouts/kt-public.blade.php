@@ -6,8 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="@yield('meta_description', 'Get to know Pasigna Dental Clinic in Guihulngan, Negros Oriental. Explore the clinic, view available services, and request an appointment.')">
     <meta name="theme-color" content="#563682">
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset(config('clinic.favicon')) }}">
+    <link rel="apple-touch-icon" href="{{ asset(config('clinic.favicon')) }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <title>@yield('title', config('clinic.name'))</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
     <a class="pd-skip" href="#main-content">Skip to content</a>
     <div class="kt-loader" id="ktLoader" aria-hidden="true">
         <div class="kt-loader__inner">
-            <img src="{{ asset('images/PasignaAssets/logo.jpg') }}" alt="" class="kt-loader__logo" width="72" height="72" loading="eager">
+            <img src="{{ asset(config('clinic.logo')) }}" alt="" class="kt-loader__logo" width="72" height="72" loading="eager">
             <div class="kt-loader__bar"><div class="kt-loader__progress"></div></div>
         </div>
     </div>
