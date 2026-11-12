@@ -68,6 +68,23 @@ class StaffPaymentsWorkflowTest extends TestCase
         $this->getJson(route('staff.payments.payable-items', ['patient_id' => $this->patient->id]))->assertJsonCount(0, 'items');
     }
 
+    public function test_zero_charge_visit_explains_why_it_cannot_receive_payment(): void
+    {
+        $this->visit->procedures()->update(['price' => 0]);
+        $this->getJson(route('staff.payments.payable-items', ['patient_id' => $this->patient->id]))
+            ->assertOk()->assertJsonCount(0, 'items')
+            ->assertJsonPath('message', 'No payable balance. A visit has no positive charge; review its treatment prices before recording payment.');
+        $this->assertDatabaseCount('payments', 0);
+    }
+
+    public function test_paid_visit_explains_that_no_balance_remains(): void
+    {
+        Payment::create(['visit_id' => $this->visit->id, 'amount' => 1000, 'method' => 'Cash', 'payment_date' => now()]);
+        $this->getJson(route('staff.payments.payable-items', ['patient_id' => $this->patient->id]))
+            ->assertOk()->assertJsonCount(0, 'items')
+            ->assertJsonPath('message', 'No unpaid visits or active plans for this patient. Check that the visit was saved and has a remaining balance.');
+    }
+
     public function test_visit_payment_preserves_charge_and_does_not_create_a_visit(): void
     {
         $before = Visit::count();
