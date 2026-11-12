@@ -180,6 +180,41 @@ class StaffPaymentsWorkflowTest extends TestCase
             ->assertOk()->assertJsonCount(0, 'items');
     }
 
+    public function test_delete_installment_plan_hides_its_receipts_and_undo_restores_collections(): void
+    {
+        $plan = $this->plan(['visit_id' => null, 'total_cost' => 25000, 'downpayment' => 5000, 'balance' => 20000,
+            'start_date' => now()->toDateString()]);
+        $receipt = InstallmentPayment::create(['installment_plan_id' => $plan->id, 'month_number' => 0,
+            'amount' => 5000, 'method' => 'Cash', 'payment_date' => now(), 'notes' => 'Downpayment']);
+        $finance = app(\App\Services\FinancialService::class);
+        $this->assertEquals(5000, $finance->collectedOn(now()));
+        $this->get(route('staff.payments.index', ['tab' => 'plans']))->assertOk()
+            ->assertSee(route('staff.installments.destroy', $plan), false)->assertSeeText('Delete Plan');
+        $this->get(route('staff.installments.show', $plan))->assertOk()->assertSeeText('Delete Plan');
+        $this->delete(route('staff.installments.destroy', $plan), ['return' => route('staff.payments.index', ['tab' => 'plans'])])
+            ->assertRedirect(route('staff.payments.index', ['tab' => 'plans']))->assertSessionHas('undo');
+        $this->assertSoftDeleted('installment_plans', ['id' => $plan->id]);
+        $this->assertNotSoftDeleted('installment_payments', ['id' => $receipt->id]);
+        $this->assertEquals(0, $finance->collectedOn(now()));
+        $this->assertEquals(0, $finance->collectedBetween(now()->startOfMonth(), now()->endOfMonth()));
+        $this->assertEquals(0, $finance->summary()['active_plans']);
+        $this->get(route('staff.payments.index'))->assertOk()->assertDontSee('INS-00001');
+        $this->post(route('staff.installments.restore', $plan->id))->assertRedirect();
+        $this->assertNotSoftDeleted('installment_plans', ['id' => $plan->id]);
+        $this->assertEquals(5000, $finance->collectedOn(now()));
+        $this->assertEquals(5000, $receipt->fresh()->amount);
+        $this->assertDatabaseHas('patients', ['id' => $this->patient->id, 'deleted_at' => null]);
+        $this->assertDatabaseHas('visits', ['id' => $this->visit->id, 'deleted_at' => null]);
+    }
+
+    public function test_patient_account_cannot_delete_an_installment_plan(): void
+    {
+        $plan = $this->plan();
+        $this->actingAs(User::factory()->create(['role' => 'user', 'is_active' => true]))
+            ->delete(route('staff.installments.destroy', $plan))->assertForbidden();
+        $this->assertNotSoftDeleted('installment_plans', ['id' => $plan->id]);
+    }
+
     public function test_patient_account_cannot_delete_a_visit_payment(): void
     {
         $payment = Payment::create(['visit_id' => $this->visit->id, 'amount' => 250,

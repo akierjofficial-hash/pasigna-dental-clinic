@@ -435,6 +435,9 @@
         <a href="{{ route('staff.installments.edit', [$plan->id, 'return' => url()->full()]) }}" class="i-btn">
             <i class="fa fa-pen"></i> Edit Plan
         </a>
+        @include('staff.payments.partials.delete-plan', [
+            'deletePlanReturn' => route('staff.payments.index', ['tab' => 'plans']),
+        ])
 
         @if($plan->visit_id)
             <a href="{{ route('staff.visits.show', [$plan->visit_id, 'return' => url()->full()]) }}" class="i-btn">

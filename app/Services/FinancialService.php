@@ -15,7 +15,8 @@ class FinancialService
         $day = $date instanceof CarbonInterface ? $date->toDateString() : $date;
 
         return (float) Payment::whereDate('payment_date', $day)->sum('amount')
-            + (float) InstallmentPayment::whereDate('payment_date', $day)->sum('amount');
+            + (float) InstallmentPayment::whereHas('plan', fn ($query) => $query->whereNull('installment_plans.deleted_at'))
+                ->whereDate('payment_date', $day)->sum('amount');
     }
 
     public function collectedBetween(CarbonInterface|string $from, CarbonInterface|string $to): float
@@ -24,7 +25,8 @@ class FinancialService
         $end = $to instanceof CarbonInterface ? $to->toDateString() : $to;
 
         return (float) Payment::whereDate('payment_date', '>=', $start)->whereDate('payment_date', '<=', $end)->sum('amount')
-            + (float) InstallmentPayment::whereDate('payment_date', '>=', $start)->whereDate('payment_date', '<=', $end)->sum('amount');
+            + (float) InstallmentPayment::whereHas('plan', fn ($query) => $query->whereNull('installment_plans.deleted_at'))
+                ->whereDate('payment_date', '>=', $start)->whereDate('payment_date', '<=', $end)->sum('amount');
     }
 
     public function visitCharge(Visit $visit): float
